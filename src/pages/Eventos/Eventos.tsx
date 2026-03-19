@@ -207,7 +207,7 @@ function Eventos() {
     name_event: "", id_building: "", id_aula: "", planta_event: "",
     timedate_event: "", timedate_end: "",
     id_profe: "", id_user: "", descrip_event: "",
-    img_event: "",                          // ← nuevo
+    img_event: "",
     capacidad_esperada: "0", prioridad: "1",
   };
 
@@ -219,7 +219,7 @@ function Eventos() {
     id_event: 0, name_event: "", id_building: "", id_aula: "", planta_event: "",
     timedate_event: "", timedate_end: "",
     id_profe: "", id_user: "", descrip_event: "",
-    img_event: "",                          // ← nuevo
+    img_event: "",
     capacidad_esperada: "0", prioridad: "1",
     google_event_id: null as string | null,
   });
@@ -231,31 +231,31 @@ function Eventos() {
   }, [gcal.errorMsg, gcal.status]);
 
   const fetchEventos = () =>
-    fetch("${import.meta.env.VITE_API_URL}/eventos")
+    fetch(`${import.meta.env.VITE_API_URL}/eventos`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => { setEventosData(Array.isArray(d) ? d : []); setLoading(false); })
       .catch(e => { console.error("fetchEventos:", e); setEventosData([]); setLoading(false); });
 
   const fetchEdificios = () =>
-    fetch("${import.meta.env.VITE_API_URL}/edificios")
+    fetch(`${import.meta.env.VITE_API_URL}/edificios`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setEdificios(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchAulas = () =>
-    fetch("${import.meta.env.VITE_API_URL}/aulas")
+    fetch(`${import.meta.env.VITE_API_URL}/aulas`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setAulas(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchProfesores = () =>
-    fetch("${import.meta.env.VITE_API_URL}/profesores")
+    fetch(`${import.meta.env.VITE_API_URL}/profesores`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setProfesores(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchUsuarios = () =>
-    fetch("${import.meta.env.VITE_API_URL}/usuarios")
+    fetch(`${import.meta.env.VITE_API_URL}/usuarios`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setUsuarios(Array.isArray(d) ? d : []))
       .catch(console.error);
@@ -288,7 +288,7 @@ function Eventos() {
     id_profe:           form.id_profe ? parseInt(form.id_profe) : null,
     id_user:            form.id_user || null,
     descrip_event:      (form as any).descrip_event || null,
-    img_event:          (form as any).img_event || null,   // ← nuevo
+    img_event:          (form as any).img_event || null,
     capacidad_esperada: parseInt(form.capacidad_esperada) || 0,
     prioridad:          parseInt(form.prioridad) || 1,
   });
@@ -302,7 +302,7 @@ function Eventos() {
     }
     const body = buildBody(addForm);
     try {
-      const res  = await fetch("${import.meta.env.VITE_API_URL}/eventos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
         setShowAddModal(false);
@@ -340,7 +340,7 @@ function Eventos() {
       id_profe:           ev.id_profe ? String(ev.id_profe) : "",
       id_user:            ev.id_user || "",
       descrip_event:      ev.descrip_event || "",
-      img_event:          ev.img_event || "",   // ← nuevo
+      img_event:          ev.img_event || "",
       capacidad_esperada: String(ev.capacidad_esperada ?? 0),
       prioridad:          String(ev.prioridad ?? 1),
       google_event_id:    ev.google_event_id ?? null,

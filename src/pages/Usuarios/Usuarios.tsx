@@ -206,7 +206,7 @@ function Usuarios() {
   const handleDelete = async (id_user: number, name_user: string) => {
     if (!window.confirm(`¿Estás seguro de eliminar a "${name_user}"?`)) return;
     try {
-      await deleteUsuario(id_user);
+      await deleteUsuario(String(id_user));
       fetchUsuarios();
     } catch {
       alert("Error al eliminar el usuario");
@@ -510,7 +510,7 @@ function Usuarios() {
                           title="Eliminar"
                           style={{ color: "#dc2626" }}
                           onClick={() =>
-                            handleDelete(usuario.id_user, usuario.name_user)
+                            handleDelete(Number(usuario.id_user), usuario.name_user)
                           }
                         >
                           <svg

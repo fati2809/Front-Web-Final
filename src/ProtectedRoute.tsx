@@ -13,7 +13,7 @@ function ProtectedRoute({ children }: { children: any }) {
   }
 
   // Verificar si la sesión ha expirado
-  if (session.expires_at && new Date(session.expires_at * 1000) < new Date()) {
+  if (session.session?.expires_at && new Date(session.session.expires_at * 1000) < new Date()) {
     console.log("Sesión expirada, redirigiendo a login");
     localStorage.clear();
     return <Navigate to="/" replace />;
