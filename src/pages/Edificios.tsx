@@ -30,34 +30,20 @@ const labelStyle: React.CSSProperties = {
 };
 const selectStyle: React.CSSProperties = { ...inputStyle };
 
-// Muestra las dos plantas con barra de color
 function CapacidadCell({ baja, alta }: { baja: number; alta: number }) {
   const total = baja + alta;
   if (total === 0) return <span style={{ color: "#9ca3af", fontSize: "13px" }}>—</span>;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: "130px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span style={{
-          width: "9px", height: "9px", borderRadius: "50%",
-          backgroundColor: "#3b82f6", flexShrink: 0,
-        }} />
-        <span style={{ fontSize: "12px", color: "#374151" }}>
-          Planta baja: <strong>{baja}</strong>
-        </span>
+        <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "#3b82f6", flexShrink: 0 }} />
+        <span style={{ fontSize: "12px", color: "#374151" }}>Planta baja: <strong>{baja}</strong></span>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span style={{
-          width: "9px", height: "9px", borderRadius: "50%",
-          backgroundColor: "#8b5cf6", flexShrink: 0,
-        }} />
-        <span style={{ fontSize: "12px", color: "#374151" }}>
-          Planta alta: <strong>{alta}</strong>
-        </span>
+        <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "#8b5cf6", flexShrink: 0 }} />
+        <span style={{ fontSize: "12px", color: "#374151" }}>Planta alta: <strong>{alta}</strong></span>
       </div>
-      <div style={{
-        fontSize: "11px", color: "#6b7280",
-        borderTop: "1px solid #f3f4f6", paddingTop: "3px", marginTop: "1px",
-      }}>
+      <div style={{ fontSize: "11px", color: "#6b7280", borderTop: "1px solid #f3f4f6", paddingTop: "3px", marginTop: "1px" }}>
         Total: <strong>{total}</strong>
       </div>
     </div>
@@ -90,14 +76,14 @@ function Edificios() {
   });
 
   const fetchEdificios = () => {
-    fetch("${import.meta.env.VITE_API_URL}/edificios")
+    fetch(`${import.meta.env.VITE_API_URL}/edificios`)
       .then(r => r.json())
       .then(d => { setEdificiosData(d); setLoading(false); })
       .catch(e => { console.error(e); setLoading(false); });
   };
 
   const fetchDivisiones = () => {
-    fetch("${import.meta.env.VITE_API_URL}/divisiones")
+    fetch(`${import.meta.env.VITE_API_URL}/divisiones`)
       .then(r => r.json())
       .then(d => setDivisiones(d))
       .catch(console.error);
@@ -118,7 +104,7 @@ function Edificios() {
   const handleAddSubmit = async () => {
     setModalError("");
     try {
-      const res = await fetch("${import.meta.env.VITE_API_URL}/edificios", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name_building: addForm.name_building,
@@ -195,7 +181,6 @@ function Edificios() {
     maxHeight: "92vh", overflowY: "auto",
   };
 
-  // Sección de capacidad reutilizable para add y edit
   const CapacidadSection = (
     form: typeof addForm | typeof editForm,
     setForm: React.Dispatch<React.SetStateAction<any>>
@@ -203,26 +188,14 @@ function Edificios() {
     const baja = parseInt((form as any).capacidad_planta_baja) || 0;
     const alta = parseInt((form as any).capacidad_planta_alta) || 0;
     return (
-      <div style={{
-        background: "#f8fafc", border: "1px solid #e2e8f0",
-        borderRadius: "10px", padding: "16px",
-        display: "flex", flexDirection: "column", gap: "12px",
-      }}>
+      <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
         <span style={{ fontSize: "11px", fontWeight: 700, color: "#64748b", letterSpacing: "0.06em" }}>
           CAPACIDAD DEL EDIFICIO
         </span>
-
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-          {/* Planta Baja */}
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <label style={{
-              fontSize: "12px", fontWeight: 600, color: "#3b82f6",
-              display: "flex", alignItems: "center", gap: "5px",
-            }}>
-              <span style={{
-                width: "9px", height: "9px", borderRadius: "50%",
-                backgroundColor: "#3b82f6", display: "inline-block",
-              }} />
+            <label style={{ fontSize: "12px", fontWeight: 600, color: "#3b82f6", display: "flex", alignItems: "center", gap: "5px" }}>
+              <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "#3b82f6", display: "inline-block" }} />
               Planta baja
             </label>
             <input
@@ -232,17 +205,9 @@ function Edificios() {
               onChange={(e) => setForm((p: any) => ({ ...p, capacidad_planta_baja: e.target.value }))}
             />
           </div>
-
-          {/* Planta Alta */}
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <label style={{
-              fontSize: "12px", fontWeight: 600, color: "#8b5cf6",
-              display: "flex", alignItems: "center", gap: "5px",
-            }}>
-              <span style={{
-                width: "9px", height: "9px", borderRadius: "50%",
-                backgroundColor: "#8b5cf6", display: "inline-block",
-              }} />
+            <label style={{ fontSize: "12px", fontWeight: 600, color: "#8b5cf6", display: "flex", alignItems: "center", gap: "5px" }}>
+              <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: "#8b5cf6", display: "inline-block" }} />
               Planta alta
             </label>
             <input
@@ -253,18 +218,9 @@ function Edificios() {
             />
           </div>
         </div>
-
-        {/* Total en tiempo real */}
-        <div style={{
-          display: "flex", justifyContent: "flex-end", alignItems: "center",
-          gap: "6px", fontSize: "12px", color: "#64748b",
-          borderTop: "1px solid #e2e8f0", paddingTop: "10px",
-        }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "6px", fontSize: "12px", color: "#64748b", borderTop: "1px solid #e2e8f0", paddingTop: "10px" }}>
           Capacidad total:
-          <span style={{
-            fontWeight: 700, fontSize: "14px", color: "#0f172a",
-            background: "#e0f2fe", padding: "2px 10px", borderRadius: "999px",
-          }}>
+          <span style={{ fontWeight: 700, fontSize: "14px", color: "#0f172a", background: "#e0f2fe", padding: "2px 10px", borderRadius: "999px" }}>
             {baja + alta} personas
           </span>
         </div>
