@@ -1,0 +1,173 @@
+/* Login Container - Full viewport centering */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', 
+               'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Login Card */
+.login-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 380px;
+  padding: 32px;
+  border-radius: 12px;
+  transition: box-shadow 150ms ease;
+}
+
+
+/* Title */
+.login-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #445B84;
+  text-align: center;
+  margin: 0 0 32px 0;
+  letter-spacing: -0.5px;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Form Label */
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #52606d;
+  margin: 0;
+}
+
+/* Form Input */
+.form-input {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 15px;
+  color: #1f2933;
+  background-color: #eef2f6;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  transition: all 150ms ease;
+  font-family: inherit;
+}
+
+.form-input::placeholder {
+  color: #9aa5b1;
+}
+
+.form-input:focus {
+  background-color: #ffffff;
+  border-color: #445B84;
+  box-shadow: 0 0 0 3px rgba(74, 98, 138, 0.1);
+}
+
+.form-input:hover:not(:focus) {
+  background-color: #e4e9f0;
+}
+
+/* Forgot Password Container */
+.forgot-password-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+}
+
+/* Forgot Password Link */
+.forgot-password-link {
+  font-size: 13px;
+  color: #7b8794;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.forgot-password-link:hover {
+  color: #445B84;
+}
+
+/* Login Button */
+.login-button {
+  height: 44px;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #445B84;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-family: inherit;
+}
+
+.login-button:hover {
+  background-color: #3d5170;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 98, 138, 0.2);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(74, 98, 138, 0.2);
+}
+
+/* Register Text */
+.register-text {
+  margin: 24px 0 0 0;
+  font-size: 14px;
+  color: #52606d;
+  text-align: center;
+}
+
+/* Register Link */
+.register-link {
+  color: #4a628a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 150ms ease;
+}
+
+.register-link:hover {
+  color: #3d5170;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 24px;
+  }
+
+  .login-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .form-input,
+  .login-button {
+    height: 48px; /* Más grande en móvil para mejor accesibilidad */
+  }
+}
+
+/* Accesibilidad - Focus visible para teclado */
+.login-button:focus-visible,
+.forgot-password-link:focus-visible,
+.register-link:focus-visible {
+  outline: 2px solid #4a628a;
+  outline-offset: 2px;
+}
