@@ -1,13 +1,20 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { supabase } from "../config/supabase";
+
+const API_URL = import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL}";
 
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   try {
+    // Obtener token de Supabase automáticamente
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
     const response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {}),
         ...(options.headers || {}),
       },
-      ...options,
     });
 
     if (!response.ok) {

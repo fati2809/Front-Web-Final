@@ -231,31 +231,31 @@ function Eventos() {
   }, [gcal.errorMsg, gcal.status]);
 
   const fetchEventos = () =>
-    fetch("http://localhost:8000/eventos")
+    fetch("${import.meta.env.VITE_API_URL}/eventos")
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => { setEventosData(Array.isArray(d) ? d : []); setLoading(false); })
       .catch(e => { console.error("fetchEventos:", e); setEventosData([]); setLoading(false); });
 
   const fetchEdificios = () =>
-    fetch("http://localhost:8000/edificios")
+    fetch("${import.meta.env.VITE_API_URL}/edificios")
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setEdificios(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchAulas = () =>
-    fetch("http://localhost:8000/aulas")
+    fetch("${import.meta.env.VITE_API_URL}/aulas")
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setAulas(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchProfesores = () =>
-    fetch("http://localhost:8000/profesores")
+    fetch("${import.meta.env.VITE_API_URL}/profesores")
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setProfesores(Array.isArray(d) ? d : []))
       .catch(console.error);
 
   const fetchUsuarios = () =>
-    fetch("http://localhost:8000/usuarios")
+    fetch("${import.meta.env.VITE_API_URL}/usuarios")
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(d => setUsuarios(Array.isArray(d) ? d : []))
       .catch(console.error);
@@ -302,7 +302,7 @@ function Eventos() {
     }
     const body = buildBody(addForm);
     try {
-      const res  = await fetch("http://localhost:8000/eventos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res  = await fetch("${import.meta.env.VITE_API_URL}/eventos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
         setShowAddModal(false);
@@ -355,7 +355,7 @@ function Eventos() {
     }
     const body = buildBody(editForm);
     try {
-      const res  = await fetch(`http://localhost:8000/eventos/${editForm.id_event}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${editForm.id_event}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
         setShowEditModal(false);
@@ -383,14 +383,14 @@ function Eventos() {
   const handleDelete = async (id: number, name: string) => {
     if (!window.confirm(`¿Eliminar el evento "${name}"?`)) return;
     try {
-      const res = await fetch(`http://localhost:8000/eventos/${id}`, { method: "DELETE" });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${id}`, { method: "DELETE" });
       if (res.ok) fetchEventos(); else alert("Error al eliminar el evento");
     } catch { alert("No se pudo conectar con el servidor"); }
   };
 
   const handleToggleStatus = async (ev: Evento) => {
     try {
-      const res = await fetch(`http://localhost:8000/eventos/${ev.id_event}/toggle-status`, { method: "PATCH" });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${ev.id_event}/toggle-status`, { method: "PATCH" });
       if (res.ok) fetchEventos();
     } catch { console.error("Error cambiando estado"); }
   };
