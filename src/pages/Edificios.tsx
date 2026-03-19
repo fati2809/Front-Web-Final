@@ -90,14 +90,14 @@ function Edificios() {
   });
 
   const fetchEdificios = () => {
-    fetch("http://localhost:8000/edificios")
+    fetch("${import.meta.env.VITE_API_URL}/edificios")
       .then(r => r.json())
       .then(d => { setEdificiosData(d); setLoading(false); })
       .catch(e => { console.error(e); setLoading(false); });
   };
 
   const fetchDivisiones = () => {
-    fetch("http://localhost:8000/divisiones")
+    fetch("${import.meta.env.VITE_API_URL}/divisiones")
       .then(r => r.json())
       .then(d => setDivisiones(d))
       .catch(console.error);
@@ -118,7 +118,7 @@ function Edificios() {
   const handleAddSubmit = async () => {
     setModalError("");
     try {
-      const res = await fetch("http://localhost:8000/edificios", {
+      const res = await fetch("${import.meta.env.VITE_API_URL}/edificios", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name_building: addForm.name_building,
@@ -156,7 +156,7 @@ function Edificios() {
   const handleEditSubmit = async () => {
     setModalError("");
     try {
-      const res = await fetch(`http://localhost:8000/edificios/${editForm.id_building}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
         method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name_building: editForm.name_building,
@@ -178,7 +178,7 @@ function Edificios() {
   const handleDelete = async (id: number, name: string) => {
     if (!window.confirm(`¿Eliminar el edificio "${name}"?`)) return;
     try {
-      const res = await fetch(`http://localhost:8000/edificios/${id}`, { method: "DELETE" });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${id}`, { method: "DELETE" });
       if (res.ok) fetchEdificios();
       else alert("Error al eliminar el edificio");
     } catch { alert("No se pudo conectar con el servidor"); }
