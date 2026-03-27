@@ -43,8 +43,56 @@ function Divisiones() {
   };
 
   useEffect(() => {
-    fetchDivisiones();
-  }, []);
+  fetchDivisiones();
+
+  const syncPending = async () => {
+    const pending = JSON.parse(
+      localStorage.getItem("pending_divisiones") || "[]"
+    );
+
+    if (pending.length === 0) return;
+
+    try {
+      for (const div of pending) {
+        await createDivision(div);
+      }
+
+      localStorage.removeItem("pending_divisiones");
+      fetchDivisiones();
+    } catch (err) {
+      console.error("Error sincronizando", err);
+    }
+  };
+
+  syncPending();
+}, []);
+
+  useEffect(() => {
+  const syncPending = async () => {
+    const pending = JSON.parse(
+      localStorage.getItem("pending_divisiones") || "[]"
+    );
+
+    if (pending.length === 0) return;
+
+    try {
+      for (const div of pending) {
+        await createDivision(div);
+      }
+
+      localStorage.removeItem("pending_divisiones");
+      fetchDivisiones();
+
+      alert("Datos offline sincronizados correctamente");
+    } catch (err) {
+      console.error("Error sincronizando", err);
+    }
+  };
+
+  window.addEventListener("online", syncPending);
+
+  return () => window.removeEventListener("online", syncPending);
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -65,23 +113,30 @@ function Divisiones() {
     return;
   }
 
+  // 🔌 SIN INTERNET
+  if (!navigator.onLine) {
+    const pending = JSON.parse(
+      localStorage.getItem("pending_divisiones") || "[]"
+    );
+
+    pending.push(addForm);
+
+    localStorage.setItem("pending_divisiones", JSON.stringify(pending));
+
+    setShowAddModal(false);
+    setAddForm({ name_div: "" });
+
+    alert("Guardado offline. Se enviará automáticamente.");
+    return;
+  }
+
   try {
     await createDivision(addForm);
 
     setShowAddModal(false);
     setAddForm({ name_div: "" });
     fetchDivisiones();
-
   } catch (error: any) {
-
-    if (!navigator.onLine) {
-      setShowAddModal(false);
-      setAddForm({ name_div: "" });
-
-      alert("Sin conexión. Se guardará automáticamente cuando vuelva el internet.");
-      return;
-    }
-
     setModalError(error.message || "Error del servidor");
   }
 };
