@@ -30,16 +30,16 @@ function Divisiones() {
 
   const [modalError, setModalError] = useState("");
 
-  const fetchDivisiones = () => {
-    getDivisionesAll()
-      .then((data) => {
-        setDivisionesData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+  const fetchDivisiones = async () => {
+    try {
+      setLoading(true);
+      const data = await getDivisionesAll();
+      setDivisionesData(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -59,21 +59,19 @@ function Divisiones() {
 
   const handleAddSubmit = async () => {
     setModalError("");
+
     if (!addForm.name_div.trim()) {
       setModalError("El nombre es obligatorio");
       return;
     }
+
     try {
-      await createDivision({ name_div: addForm.name_div });
+      await createDivision(addForm);
       setShowAddModal(false);
       setAddForm({ name_div: "" });
-      fetchDivisiones();
-    } catch (error) {
-      if (error instanceof Error) {
-        setModalError(error.message);
-      } else {
-        setModalError("No se pudo conectar con el servidor");
-      }
+      await fetchDivisiones();
+    } catch (error: any) {
+      setModalError(error.message || "Error del servidor");
     }
   };
 
@@ -85,36 +83,33 @@ function Divisiones() {
 
   const handleEditSubmit = async () => {
     setModalError("");
+
     if (!editForm.name_div.trim()) {
       setModalError("El nombre es obligatorio");
       return;
     }
+
     try {
-      await updateDivision(editForm.id_div, { name_div: editForm.name_div });
+      await updateDivision(editForm.id_div, {
+        name_div: editForm.name_div,
+      });
       setShowEditModal(false);
-      fetchDivisiones();
-    } catch (error) {
-      if (error instanceof Error) {
-        setModalError(error.message);
-      } else {
-        setModalError("No se pudo conectar con el servidor");
-      }
+      await fetchDivisiones();
+    } catch (error: any) {
+      setModalError(error.message || "Error del servidor");
     }
   };
 
   const handleDelete = async (id_div: number, name: string) => {
-    if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
-    try {
-      await deleteDivision(id_div);
-      fetchDivisiones();
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("No se pudo conectar con el servidor");
-      }
-    }
-  };
+  if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
+
+  try {
+    await deleteDivision(id_div);
+    await fetchDivisiones();
+  } catch (error: any) {
+    alert(error.message || "Error al eliminar");
+  }
+};
 
   const modalStyle: React.CSSProperties = {
     position: "fixed",
