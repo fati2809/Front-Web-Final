@@ -15,10 +15,9 @@ precacheAndRoute(self.__WB_MANIFEST);
 // ==================== BACKGROUND SYNC ====================
 
 const bgSyncPlugin = new BackgroundSyncPlugin("form-submissions-queue", {
-  maxRetentionTime: 24 * 60, // 24 horas
+  maxRetentionTime: 24 * 60,
 });
 
-// Interceptar TODAS las requests al backend (POST, PUT, PATCH)
 registerRoute(
   ({ request, url }) => {
     return (
@@ -29,9 +28,8 @@ registerRoute(
   new NetworkOnly({
     plugins: [bgSyncPlugin],
   }),
-  "POST" // 👈 esto sigue siendo necesario aunque filtres arriba
+  "POST"
 );
-
 // También para PATCH y PUT (por si actualizas eventos o usuarios)
 registerRoute(
   ({ url }) => 
