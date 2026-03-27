@@ -30,6 +30,73 @@ function Divisiones() {
 
   const [modalError, setModalError] = useState("");
 
+  type ToastType =
+    | "displaced"
+    | "reassigned"
+    | "calendar_success"
+    | "calendar_error"
+    | "offline";
+
+  const toastConfig: Record<
+    ToastType,
+    {
+      border: string;
+      iconBg: string;
+      iconColor: string;
+      titleColor: string;
+      title: string;
+    }
+  > = {
+    displaced: {
+      border: "#f59e0b",
+      iconBg: "#fef3c7",
+      iconColor: "#f59e0b",
+      titleColor: "#92400e",
+      title: "Evento desplazado por prioridad",
+    },
+    reassigned: {
+      border: "#3b82f6",
+      iconBg: "#eff6ff",
+      iconColor: "#3b82f6",
+      titleColor: "#1e40af",
+      title: "ℹ️ Evento reasignado automáticamente",
+    },
+    calendar_success: {
+      border: "#16a34a",
+      iconBg: "#dcfce7",
+      iconColor: "#16a34a",
+      titleColor: "#14532d",
+      title: "📅 Guardado en Google Calendar",
+    },
+    calendar_error: {
+      border: "#dc2626",
+      iconBg: "#fee2e2",
+      iconColor: "#dc2626",
+      titleColor: "#7f1d1d",
+      title: "Error en Google Calendar",
+    },
+    offline: {
+      border: "#f97316",
+      iconBg: "#ffedd5",
+      iconColor: "#f97316",
+      titleColor: "#7c2d12",
+      title: "Sin conexión",
+    },
+  };
+
+  const [toast, setToast] = useState<{
+    type: ToastType;
+    message: string;
+  } | null>(null);
+
+  const showToast = (type: ToastType, message: string) => {
+    setToast({ type, message });
+
+    setTimeout(() => {
+      setToast(null);
+    }, 4000);
+  };
+
   const fetchDivisiones = async () => {
     try {
       setLoading(true);
@@ -58,33 +125,36 @@ function Divisiones() {
   );
 
   const handleAddSubmit = async () => {
-  setModalError("");
+    setModalError("");
 
-  if (!addForm.name_div.trim()) {
-    setModalError("El nombre es obligatorio");
-    return;
-  }
-
-  try {
-    await createDivision(addForm);
-
-    setShowAddModal(false);
-    setAddForm({ name_div: "" });
-    fetchDivisiones();
-
-  } catch (error: any) {
-
-    if (!navigator.onLine) {
-      setShowAddModal(false);
-      setAddForm({ name_div: "" });
-
-      alert("📡 Sin conexión. Se guardará automáticamente cuando vuelva el internet.");
+    if (!addForm.name_div.trim()) {
+      setModalError("El nombre es obligatorio");
       return;
     }
 
-    setModalError(error.message || "Error del servidor");
-  }
-};
+    try {
+      await createDivision(addForm);
+
+      setShowAddModal(false);
+      setAddForm({ name_div: "" });
+      fetchDivisiones();
+
+    } catch (error: any) {
+
+      if (!navigator.onLine) {
+        setShowAddModal(false);
+        setAddForm({ name_div: "" });
+
+        showToast(
+          "offline",
+          "Se guardará automáticamente cuando vuelva el internet."
+        );
+        return;
+      }
+
+      setModalError(error.message || "Error del servidor");
+    }
+  };
 
   const openEditModal = (d: Division) => {
     setModalError("");
@@ -112,15 +182,15 @@ function Divisiones() {
   };
 
   const handleDelete = async (id_div: number, name: string) => {
-  if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
+    if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
 
-  try {
-    await deleteDivision(id_div);
-    await fetchDivisiones();
-  } catch (error: any) {
-    alert(error.message || "Error al eliminar");
-  }
-};
+    try {
+      await deleteDivision(id_div);
+      await fetchDivisiones();
+    } catch (error: any) {
+      alert(error.message || "Error al eliminar");
+    }
+  };
 
   const modalStyle: React.CSSProperties = {
     position: "fixed",
@@ -517,6 +587,56 @@ function Divisiones() {
           </div>
         </div>
       )}
+      {toast && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            minWidth: "320px",
+            background: "#fff",
+            borderLeft: `6px solid ${toastConfig[toast.type].border}`,
+            borderRadius: "10px",
+            padding: "14px 16px",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+            display: "flex",
+            gap: "12px",
+            alignItems: "flex-start",
+            zIndex: 2000,
+          }}
+        >
+          <div
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: toastConfig[toast.type].iconBg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: toastConfig[toast.type].iconColor,
+              fontSize: "16px",
+            }}
+          >
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span
+              style={{
+                fontWeight: 600,
+                color: toastConfig[toast.type].titleColor,
+                fontSize: "14px",
+              }}
+            >
+              {toastConfig[toast.type].title}
+            </span>
+            <span style={{ fontSize: "13px", color: "#6b7280" }}>
+              {toast.message}
+            </span>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
