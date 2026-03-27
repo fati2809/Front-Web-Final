@@ -295,49 +295,69 @@ function Eventos() {
 
   // ── Crear evento ──────────────────────────────────────────────────────────
   const handleAddSubmit = async () => {
-    setModalError("");
+  setModalError("");
 
-    if (!addForm.name_event.trim()) {
-      setModalError("El nombre del evento es obligatorio.");
-      return;
-    }
+  if (!addForm.name_event.trim()) {
+    setModalError("El nombre del evento es obligatorio.");
+    return;
+  }
 
-    if (
-      addForm.timedate_end &&
-      addForm.timedate_event &&
-      addForm.timedate_end <= addForm.timedate_event
-    ) {
-      setModalError("La fecha/hora de fin debe ser posterior a la de inicio.");
-      return;
-    }
+  if (
+    addForm.timedate_end &&
+    addForm.timedate_event &&
+    addForm.timedate_end <= addForm.timedate_event
+  ) {
+    setModalError("La fecha/hora de fin debe ser posterior a la de inicio.");
+    return;
+  }
 
-    const body = buildBody(addForm);
+  const body = buildBody(addForm);
 
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (res.ok) {
-        setShowAddModal(false);
-        setAddForm(emptyAdd);
-        fetchEventos();
-      } else {
-        setModalError(data.detail || "Error al agregar evento");
+    if (res.ok) {
+      setShowAddModal(false);
+      setAddForm(emptyAdd);
+      fetchEventos();
+
+      // ✅ AQUÍ es donde va Google Calendar
+      if (gcal.isSignedIn && addForm.timedate_event) {
+        const edificioNombre = edificios.find(e => e.id_building === parseInt(addForm.id_building))?.name_building;
+        const aulaSeleccionada = aulas.find(a => a.id_aula === parseInt(addForm.id_aula));
+
+        const googleId = await gcal.saveEvent({
+          name_event: addForm.name_event,
+          timedate_event: addForm.timedate_event,
+          timedate_end_event: addForm.timedate_end || null,
+          name_building: edificioNombre ?? null,
+          planta_event: aulaSeleccionada?.planta ?? null,
+          capacidad_event: parseInt(addForm.capacidad_esperada) || 0,
+        });
+
+        // 🔥 AQUÍ usas ALERT en vez de toast (lo que querías)
+        if (googleId) {
+          alert(`"${addForm.name_event}" se agregó a Google Calendar`);
+        } else if (gcal.errorMsg) {
+          alert(gcal.errorMsg);
+        }
       }
 
-    } catch (error) {
-
-      alert("Evento agregado correctamente en Google Calendar");
-      alert("Error al guardar en Google Calendar");
-
-      setModalError("No se pudo conectar con el servidor");
+    } else {
+      setModalError(data.detail || "Error al agregar evento");
     }
-  };
+
+  } catch (error) {
+    console.error(error);
+    setModalError("No se pudo conectar con el servidor");
+  }
+};
 
   // ── Editar evento ─────────────────────────────────────────────────────────
   const openEditModal = (ev: Evento) => {
