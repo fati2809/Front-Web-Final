@@ -83,7 +83,6 @@ function Divisiones() {
       localStorage.removeItem("pending_divisiones");
       fetchDivisiones();
 
-      alert("Datos offline sincronizados correctamente");
     } catch (err) {
       console.error("Error sincronizando", err);
     }

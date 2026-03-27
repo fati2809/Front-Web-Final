@@ -332,16 +332,8 @@ function Eventos() {
 
     } catch (error) {
 
-      if (!navigator.onLine) {
-        console.log("📴 Offline → request guardado en Background Sync");
-
-        setShowAddModal(false);
-        setAddForm(emptyAdd);
-
-        showToast("Evento guardado offline. Se enviará cuando haya conexión.", "reassigned");
-
-        return;
-      }
+      alert("Evento agregado correctamente en Google Calendar");
+      alert("Error al guardar en Google Calendar");
 
       setModalError("No se pudo conectar con el servidor");
     }
