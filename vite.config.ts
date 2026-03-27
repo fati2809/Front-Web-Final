@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -33,13 +32,62 @@ export default defineConfig({
           },
         ],
       },
+
+      // ←←← CONFIGURACIÓN DE BACKGROUND SYNC ←←←
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json}"],
+
+        runtimeCaching: [
+          {
+            // Intercepta todos los POST a rutas que empiecen con /api/
+            urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+            handler: "NetworkOnly",        // Nunca usa cache para mutaciones
+            method: "POST",
+            options: {
+              backgroundSync: {
+                name: "form-submissions-queue",   // Nombre de la cola
+                options: {
+                  maxRetentionTime: 24 * 60,      // Mantener en cola máximo 24 horas
+                },
+              },
+            },
+          },
+          {
+            // También para PATCH y PUT (por si actualizas registros)
+            urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+            handler: "NetworkOnly",
+            method: "PATCH",
+            options: {
+              backgroundSync: {
+                name: "form-submissions-queue",
+                options: {
+                  maxRetentionTime: 24 * 60,
+                },
+              },
+            },
+          },
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+            handler: "NetworkOnly",
+            method: "PUT",
+            options: {
+              backgroundSync: {
+                name: "form-submissions-queue",
+                options: {
+                  maxRetentionTime: 24 * 60,
+                },
+              },
+            },
+          },
+        ],
+      },
     }),
   ],
 
   server: {
     port: 5173,
     proxy: {
-      // Proxy opcional - puedes comentar esto si prefieres usar CORS directo
+      // Si usas proxy en desarrollo, déjalo como está
       // '/api': {
       //   target: 'http://localhost:8000',
       //   changeOrigin: true,
@@ -48,5 +96,3 @@ export default defineConfig({
     },
   },
 });
-
-
