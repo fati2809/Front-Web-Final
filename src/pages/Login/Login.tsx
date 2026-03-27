@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signInWithGoogle } from "../../services/auth";
+import logo from "../../assets/mapposting_logo.jpeg";
 import "./Login.css";
 
 function Login() {
@@ -28,6 +29,18 @@ function Login() {
     <div className="login-container">
       <div className="login-card">
         <h1 className="login-title">Bienvenido</h1>
+
+        <img
+          src={logo}
+          alt="MapPosting Logo"
+          style={{
+            width: "120px",
+            height: "auto",
+            marginBottom: "24px",
+            display: "block",
+            margin: "0 auto 24px auto",
+          }}
+        />
 
         <div className="login-form">
           {error && (
