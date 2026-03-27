@@ -57,7 +57,7 @@ function Divisiones() {
     d.name_div.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const handleAddSubmit = async () => {
+ const handleAddSubmit = async () => {
   setModalError("");
 
   if (!addForm.name_div.trim()) {
@@ -112,15 +112,15 @@ function Divisiones() {
   };
 
   const handleDelete = async (id_div: number, name: string) => {
-  if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
+    if (!window.confirm(`¿Eliminar la división "${name}"?`)) return;
 
-  try {
-    await deleteDivision(id_div);
-    await fetchDivisiones();
-  } catch (error: any) {
-    alert(error.message || "Error al eliminar");
-  }
-};
+    try {
+      await deleteDivision(id_div);
+      await fetchDivisiones();
+    } catch (error: any) {
+      alert(error.message || "Error al eliminar");
+    }
+  };
 
   const modalStyle: React.CSSProperties = {
     position: "fixed",
