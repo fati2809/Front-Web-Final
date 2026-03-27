@@ -12,20 +12,24 @@ precacheAndRoute(self.__WB_MANIFEST);
 
 // ==================== BACKGROUND SYNC ====================
 
+// ==================== BACKGROUND SYNC ====================
+
 const bgSyncPlugin = new BackgroundSyncPlugin("form-submissions-queue", {
   maxRetentionTime: 24 * 60, // 24 horas
 });
 
-// Configuración para interceptar requests a tu backend (dominio externo)
+// Interceptar TODAS las requests al backend (POST, PUT, PATCH)
 registerRoute(
-  ({ url }) => 
-    url.pathname === "/eventos" || 
-    url.pathname.startsWith("/api/") ||
-    url.host === "maposting-backend.onrender.com",
+  ({ request, url }) => {
+    return (
+      url.origin === "https://maposting-backend.onrender.com" &&
+      ["POST", "PUT", "PATCH"].includes(request.method)
+    );
+  },
   new NetworkOnly({
     plugins: [bgSyncPlugin],
   }),
-  "POST"
+  "POST" // 👈 esto sigue siendo necesario aunque filtres arriba
 );
 
 // También para PATCH y PUT (por si actualizas eventos o usuarios)
