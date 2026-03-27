@@ -2,14 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
-        enabled: true, // permite probar PWA en desarrollo
+        enabled: true,
+        type: "module",
       },
       manifest: {
         name: "Mapposting",
@@ -33,36 +33,32 @@ export default defineConfig({
         ],
       },
 
-      // ←←← CONFIGURACIÓN DE BACKGROUND SYNC ←←←
+      // Configuración mejorada de Background Sync
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json}"],
 
         runtimeCaching: [
           {
-            // Intercepta todos los POST a rutas que empiecen con /api/
             urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
-            handler: "NetworkOnly",        // Nunca usa cache para mutaciones
+            handler: "NetworkOnly",
             method: "POST",
             options: {
               backgroundSync: {
-                name: "form-submissions-queue",   // Nombre de la cola
+                name: "form-submissions-queue",
                 options: {
-                  maxRetentionTime: 24 * 60,      // Mantener en cola máximo 24 horas
+                  maxRetentionTime: 24 * 60, // 24 horas
                 },
               },
             },
           },
           {
-            // También para PATCH y PUT (por si actualizas registros)
             urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
             handler: "NetworkOnly",
             method: "PATCH",
             options: {
               backgroundSync: {
                 name: "form-submissions-queue",
-                options: {
-                  maxRetentionTime: 24 * 60,
-                },
+                options: { maxRetentionTime: 24 * 60 },
               },
             },
           },
@@ -73,9 +69,7 @@ export default defineConfig({
             options: {
               backgroundSync: {
                 name: "form-submissions-queue",
-                options: {
-                  maxRetentionTime: 24 * 60,
-                },
+                options: { maxRetentionTime: 24 * 60 },
               },
             },
           },
@@ -86,13 +80,6 @@ export default defineConfig({
 
   server: {
     port: 5173,
-    proxy: {
-      // Si usas proxy en desarrollo, déjalo como está
-      // '/api': {
-      //   target: 'http://localhost:8000',
-      //   changeOrigin: true,
-      //   rewrite: (path) => path.replace(/^\/api/, ''),
-      // },
-    },
+    // tu proxy aquí si lo usas
   },
 });
