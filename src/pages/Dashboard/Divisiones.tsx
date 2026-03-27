@@ -58,22 +58,33 @@ function Divisiones() {
   );
 
   const handleAddSubmit = async () => {
-    setModalError("");
+  setModalError("");
 
-    if (!addForm.name_div.trim()) {
-      setModalError("El nombre es obligatorio");
+  if (!addForm.name_div.trim()) {
+    setModalError("El nombre es obligatorio");
+    return;
+  }
+
+  try {
+    await createDivision(addForm);
+
+    setShowAddModal(false);
+    setAddForm({ name_div: "" });
+    fetchDivisiones();
+
+  } catch (error: any) {
+
+    if (!navigator.onLine) {
+      setShowAddModal(false);
+      setAddForm({ name_div: "" });
+
+      alert("📡 Sin conexión. Se guardará automáticamente cuando vuelva el internet.");
       return;
     }
 
-    try {
-      await createDivision(addForm);
-      setShowAddModal(false);
-      setAddForm({ name_div: "" });
-      await fetchDivisiones();
-    } catch (error: any) {
-      setModalError(error.message || "Error del servidor");
-    }
-  };
+    setModalError(error.message || "Error del servidor");
+  }
+};
 
   const openEditModal = (d: Division) => {
     setModalError("");
