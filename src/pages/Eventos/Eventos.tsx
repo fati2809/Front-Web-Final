@@ -42,7 +42,7 @@ interface Aula {
 }
 
 interface Profesor { id_profe: number; nombre_profe: string; }
-interface Usuario  { id_user: string;  name_user: string;   }
+interface Usuario { id_user: string; name_user: string; }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
 type ToastType = "displaced" | "reassigned" | "calendar_success" | "calendar_error";
@@ -55,10 +55,10 @@ function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => v
   }, [onClose]);
 
   const config: Record<ToastType, { border: string; iconBg: string; iconColor: string; titleColor: string; title: string }> = {
-    displaced:        { border: "#f59e0b", iconBg: "#fef3c7", iconColor: "#f59e0b", titleColor: "#92400e", title: "⚡ Evento desplazado por prioridad" },
-    reassigned:       { border: "#3b82f6", iconBg: "#eff6ff", iconColor: "#3b82f6", titleColor: "#1e40af", title: "ℹ️ Evento reasignado automáticamente" },
+    displaced: { border: "#f59e0b", iconBg: "#fef3c7", iconColor: "#f59e0b", titleColor: "#92400e", title: "⚡ Evento desplazado por prioridad" },
+    reassigned: { border: "#3b82f6", iconBg: "#eff6ff", iconColor: "#3b82f6", titleColor: "#1e40af", title: "ℹ️ Evento reasignado automáticamente" },
     calendar_success: { border: "#16a34a", iconBg: "#dcfce7", iconColor: "#16a34a", titleColor: "#14532d", title: "📅 Guardado en Google Calendar" },
-    calendar_error:   { border: "#dc2626", iconBg: "#fee2e2", iconColor: "#dc2626", titleColor: "#7f1d1d", title: "❌ Error en Google Calendar" },
+    calendar_error: { border: "#dc2626", iconBg: "#fee2e2", iconColor: "#dc2626", titleColor: "#7f1d1d", title: "❌ Error en Google Calendar" },
   };
   const cfg = config[type];
 
@@ -66,10 +66,10 @@ function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => v
     <div style={{ position: "fixed", bottom: "28px", right: "28px", zIndex: 2000, background: "#fff", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.15)", border: `1.5px solid ${cfg.border}`, padding: "16px 20px", maxWidth: "420px", display: "flex", gap: "12px", animation: "slideInToast 0.3s ease" }}>
       <style>{`@keyframes slideInToast { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`}</style>
       <div style={{ width: "36px", height: "36px", borderRadius: "50%", flexShrink: 0, backgroundColor: cfg.iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {type === "displaced"        && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>}
-        {type === "reassigned"       && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>}
-        {type === "calendar_success" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>}
-        {type === "calendar_error"   && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>}
+        {type === "displaced" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4" /><path d="M17 8v12m0 0l4-4m-4 4l-4-4" /></svg>}
+        {type === "reassigned" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>}
+        {type === "calendar_success" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+        {type === "calendar_error" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>}
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: "13px", fontWeight: 700, color: cfg.titleColor, marginBottom: "4px" }}>{cfg.title}</div>
@@ -84,10 +84,10 @@ function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => v
 function GoogleCalIcon({ size = 18, color }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="4" width="18" height="18" rx="2" stroke={color || "#1a73e8"} strokeWidth="2"/>
-      <line x1="16" y1="2" x2="16" y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="8"  y1="2" x2="8"  y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="3"  y1="10" x2="21" y2="10" stroke={color || "#1a73e8"} strokeWidth="2"/>
+      <rect x="3" y="4" width="18" height="18" rx="2" stroke={color || "#1a73e8"} strokeWidth="2" />
+      <line x1="16" y1="2" x2="16" y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round" />
+      <line x1="8" y1="2" x2="8" y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round" />
+      <line x1="3" y1="10" x2="21" y2="10" stroke={color || "#1a73e8"} strokeWidth="2" />
       <text x="12" y="19" textAnchor="middle" fontSize="8" fontWeight="bold" fill={color || "#1a73e8"}>G</text>
     </svg>
   );
@@ -139,9 +139,9 @@ function FechaCell({ inicio, fin }: { inicio: string | null; fin: string | null 
 }
 
 const PRIORIDAD: Record<number, { label: string; color: string; bg: string; dot: string }> = {
-  1: { label: "Baja",  color: "#16a34a", bg: "#dcfce7", dot: "#22c55e" },
+  1: { label: "Baja", color: "#16a34a", bg: "#dcfce7", dot: "#22c55e" },
   2: { label: "Media", color: "#d97706", bg: "#fef9c3", dot: "#eab308" },
-  3: { label: "Alta",  color: "#dc2626", bg: "#fee2e2", dot: "#ef4444" },
+  3: { label: "Alta", color: "#dc2626", bg: "#fee2e2", dot: "#ef4444" },
 };
 
 function SemaforoBadge({ nivel }: { nivel: number }) {
@@ -170,17 +170,17 @@ function PrioridadSelector({ value, onChange }: { value: string; onChange: (v: s
 
 // ── Config de plantas ─────────────────────────────────────────────────────────
 const PLANTA_BTN: Record<string, { label: string; color: string; bg: string; dot: string }> = {
-  baja:   { label: "Planta baja", color: "#3b82f6", bg: "#eff6ff", dot: "#3b82f6" },
-  alta:   { label: "Planta alta", color: "#8b5cf6", bg: "#f5f3ff", dot: "#8b5cf6" },
-  sotano: { label: "Sótano",      color: "#f59e0b", bg: "#fffbeb", dot: "#f59e0b" },
-  azotea: { label: "Azotea",      color: "#10b981", bg: "#ecfdf5", dot: "#10b981" },
+  baja: { label: "Planta baja", color: "#3b82f6", bg: "#eff6ff", dot: "#3b82f6" },
+  alta: { label: "Planta alta", color: "#8b5cf6", bg: "#f5f3ff", dot: "#8b5cf6" },
+  sotano: { label: "Sótano", color: "#f59e0b", bg: "#fffbeb", dot: "#f59e0b" },
+  azotea: { label: "Azotea", color: "#10b981", bg: "#ecfdf5", dot: "#10b981" },
 };
 
 // ── Estilos modales ───────────────────────────────────────────────────────────
 const modalOverlay: React.CSSProperties = { position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };
-const modalCard: React.CSSProperties    = { background: "#fff", borderRadius: "12px", padding: "32px", width: "480px", display: "flex", flexDirection: "column", gap: "14px", maxHeight: "92vh", overflowY: "auto" };
-const inputStyle: React.CSSProperties  = { width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d1d5db", fontSize: "14px", boxSizing: "border-box" };
-const labelStyle: React.CSSProperties  = { fontSize: "12px", fontWeight: 600, color: "#6b7280", marginBottom: "-6px" };
+const modalCard: React.CSSProperties = { background: "#fff", borderRadius: "12px", padding: "32px", width: "480px", display: "flex", flexDirection: "column", gap: "14px", maxHeight: "92vh", overflowY: "auto" };
+const inputStyle: React.CSSProperties = { width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d1d5db", fontSize: "14px", boxSizing: "border-box" };
+const labelStyle: React.CSSProperties = { fontSize: "12px", fontWeight: 600, color: "#6b7280", marginBottom: "-6px" };
 
 function detectWarningType(msg: string): "displaced" | "reassigned" {
   if (msg.toLowerCase().includes("desplaz") || msg.toLowerCase().includes("prioridad")) return "displaced";
@@ -193,15 +193,15 @@ function Eventos() {
   const gcal = useGoogleCalendar();
 
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
-  const [searchTerm, setSearchTerm]         = useState("");
-  const [eventosData, setEventosData]       = useState<Evento[]>([]);
-  const [edificios, setEdificios]           = useState<Edificio[]>([]);
-  const [aulas, setAulas]                   = useState<Aula[]>([]);
-  const [profesores, setProfesores]         = useState<Profesor[]>([]);
-  const [usuarios, setUsuarios]             = useState<Usuario[]>([]);
-  const [loading, setLoading]               = useState(true);
-  const [modalError, setModalError]         = useState("");
-  const [toast, setToast]                   = useState<ToastItem | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [eventosData, setEventosData] = useState<Evento[]>([]);
+  const [edificios, setEdificios] = useState<Edificio[]>([]);
+  const [aulas, setAulas] = useState<Aula[]>([]);
+  const [profesores, setProfesores] = useState<Profesor[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalError, setModalError] = useState("");
+  const [toast, setToast] = useState<ToastItem | null>(null);
 
   const emptyAdd = {
     name_event: "", id_building: "", id_aula: "", planta_event: "",
@@ -212,7 +212,7 @@ function Eventos() {
   };
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [addForm, setAddForm]           = useState(emptyAdd);
+  const [addForm, setAddForm] = useState(emptyAdd);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -280,70 +280,91 @@ function Eventos() {
     usuarios.find(u => u.id_user === id)?.name_user ?? (id ? `Usuario ${id.slice(0, 8)}...` : "—");
 
   const buildBody = (form: typeof addForm | typeof editForm) => ({
-    name_event:         form.name_event || null,
-    id_building:        form.id_building ? parseInt(form.id_building) : null,
-    id_aula:            form.id_aula ? parseInt(form.id_aula) : null,
-    timedate_event:     form.timedate_event || null,
-    timedate_end:       form.timedate_end || null,
-    id_profe:           form.id_profe ? parseInt(form.id_profe) : null,
-    id_user:            form.id_user || null,
-    descrip_event:      (form as any).descrip_event || null,
-    img_event:          (form as any).img_event || null,
+    name_event: form.name_event || null,
+    id_building: form.id_building ? parseInt(form.id_building) : null,
+    id_aula: form.id_aula ? parseInt(form.id_aula) : null,
+    timedate_event: form.timedate_event || null,
+    timedate_end: form.timedate_end || null,
+    id_profe: form.id_profe ? parseInt(form.id_profe) : null,
+    id_user: form.id_user || null,
+    descrip_event: (form as any).descrip_event || null,
+    img_event: (form as any).img_event || null,
     capacidad_esperada: parseInt(form.capacidad_esperada) || 0,
-    prioridad:          parseInt(form.prioridad) || 1,
+    prioridad: parseInt(form.prioridad) || 1,
   });
 
   // ── Crear evento ──────────────────────────────────────────────────────────
   const handleAddSubmit = async () => {
     setModalError("");
-    if (!addForm.name_event.trim()) { setModalError("El nombre del evento es obligatorio."); return; }
-    if (addForm.timedate_end && addForm.timedate_event && addForm.timedate_end <= addForm.timedate_event) {
-      setModalError("La fecha/hora de fin debe ser posterior a la de inicio."); return;
+
+    if (!addForm.name_event.trim()) {
+      setModalError("El nombre del evento es obligatorio.");
+      return;
     }
+
+    if (
+      addForm.timedate_end &&
+      addForm.timedate_event &&
+      addForm.timedate_end <= addForm.timedate_event
+    ) {
+      setModalError("La fecha/hora de fin debe ser posterior a la de inicio.");
+      return;
+    }
+
     const body = buildBody(addForm);
+
     try {
-      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
       const data = await res.json();
+
       if (res.ok) {
         setShowAddModal(false);
-        if (data.reasignaciones?.length > 0) {
-          const r = data.reasignaciones[0];
-          if (r.reasignado) setTimeout(() => showToast(`"${r.evento_movido}" fue movido a ${r.nombre_edificio_nuevo} por conflicto de prioridad.`, "displaced"), 150);
-        }
-        if (data.warning) setTimeout(() => showToast(data.warning, detectWarningType(data.warning)), 150);
-        if (gcal.isSignedIn && addForm.timedate_event) {
-          const edificioNombre = edificios.find(e => e.id_building === parseInt(addForm.id_building))?.name_building;
-          const aulaSeleccionada = aulas.find(a => a.id_aula === parseInt(addForm.id_aula));
-          const googleId = await gcal.saveEvent({ name_event: addForm.name_event, timedate_event: addForm.timedate_event, timedate_end_event: addForm.timedate_end || null, name_building: edificioNombre ?? null, planta_event: aulaSeleccionada?.planta ?? null, capacidad_event: parseInt(addForm.capacidad_esperada) || 0 });
-          if (googleId) showToast(`"${addForm.name_event}" agregado a tu Google Calendar.`, "calendar_success");
-          else if (gcal.errorMsg) showToast(gcal.errorMsg, "calendar_error");
-        }
         setAddForm(emptyAdd);
         fetchEventos();
       } else {
-        setModalError(data.detail || data.mensaje || "Error al agregar evento");
+        setModalError(data.detail || "Error al agregar evento");
       }
-    } catch { setModalError("No se pudo conectar con el servidor"); }
+
+    } catch (error) {
+
+      if (!navigator.onLine) {
+        console.log("📴 Offline → request guardado en Background Sync");
+
+        setShowAddModal(false);
+        setAddForm(emptyAdd);
+
+        showToast("Evento guardado offline. Se enviará cuando haya conexión.", "reassigned");
+
+        return;
+      }
+
+      setModalError("No se pudo conectar con el servidor");
+    }
   };
 
   // ── Editar evento ─────────────────────────────────────────────────────────
   const openEditModal = (ev: Evento) => {
     setModalError("");
     setEditForm({
-      id_event:           ev.id_event,
-      name_event:         ev.name_event || "",
-      id_building:        ev.id_building ? String(ev.id_building) : "",
-      id_aula:            ev.id_aula ? String(ev.id_aula) : "",
-      planta_event:       ev.aulas?.planta ?? "",
-      timedate_event:     ev.timedate_event ? ev.timedate_event.slice(0, 16) : "",
-      timedate_end:       ev.timedate_end ? ev.timedate_end.slice(0, 16) : "",
-      id_profe:           ev.id_profe ? String(ev.id_profe) : "",
-      id_user:            ev.id_user || "",
-      descrip_event:      ev.descrip_event || "",
-      img_event:          ev.img_event || "",
+      id_event: ev.id_event,
+      name_event: ev.name_event || "",
+      id_building: ev.id_building ? String(ev.id_building) : "",
+      id_aula: ev.id_aula ? String(ev.id_aula) : "",
+      planta_event: ev.aulas?.planta ?? "",
+      timedate_event: ev.timedate_event ? ev.timedate_event.slice(0, 16) : "",
+      timedate_end: ev.timedate_end ? ev.timedate_end.slice(0, 16) : "",
+      id_profe: ev.id_profe ? String(ev.id_profe) : "",
+      id_user: ev.id_user || "",
+      descrip_event: ev.descrip_event || "",
+      img_event: ev.img_event || "",
       capacidad_esperada: String(ev.capacidad_esperada ?? 0),
-      prioridad:          String(ev.prioridad ?? 1),
-      google_event_id:    ev.google_event_id ?? null,
+      prioridad: String(ev.prioridad ?? 1),
+      google_event_id: ev.google_event_id ?? null,
     });
     setShowEditModal(true);
   };
@@ -355,7 +376,7 @@ function Eventos() {
     }
     const body = buildBody(editForm);
     try {
-      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${editForm.id_event}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${editForm.id_event}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
         setShowEditModal(false);
@@ -397,18 +418,18 @@ function Eventos() {
 
   // ── Campos del modal ──────────────────────────────────────────────────────
   const ModalFields = (form: typeof addForm | typeof editForm, setForm: React.Dispatch<React.SetStateAction<any>>) => {
-    const idBuilding       = form.id_building ? parseInt(form.id_building) : null;
-    const idAula           = form.id_aula ? parseInt(form.id_aula) : null;
-    const plantaActual     = (form as any).planta_event || "";
+    const idBuilding = form.id_building ? parseInt(form.id_building) : null;
+    const idAula = form.id_aula ? parseInt(form.id_aula) : null;
+    const plantaActual = (form as any).planta_event || "";
     const aulaSeleccionada = aulas.find(a => a.id_aula === idAula) ?? null;
-    const imgUrl           = (form as any).img_event || "";
+    const imgUrl = (form as any).img_event || "";
 
     const plantasDisponibles = idBuilding
       ? [...new Set(
-          aulas
-            .filter(a => a.disponible && a.id_building === idBuilding && a.planta)
-            .map(a => a.planta!.toLowerCase())
-        )]
+        aulas
+          .filter(a => a.disponible && a.id_building === idBuilding && a.planta)
+          .map(a => a.planta!.toLowerCase())
+      )]
       : [];
 
     const aulasFiltradas = aulas.filter(a =>
@@ -421,8 +442,8 @@ function Eventos() {
       ? Math.max(0, ...aulas.filter(a => a.id_building === idBuilding && a.planta?.toLowerCase() === plantaActual).map(a => a.capacidad))
       : null;
 
-    const capVal       = parseInt(form.capacidad_esperada) || 0;
-    const overCap      = aulaSeleccionada ? capVal > aulaSeleccionada.capacidad : false;
+    const capVal = parseInt(form.capacidad_esperada) || 0;
+    const overCap = aulaSeleccionada ? capVal > aulaSeleccionada.capacidad : false;
     const plantaCfgSel = PLANTA_BTN[aulaSeleccionada?.planta?.toLowerCase() ?? ""] ?? null;
 
     return (
@@ -476,7 +497,7 @@ function Eventos() {
             ) : (
               <div style={{ display: "flex", gap: "8px" }}>
                 {plantasDisponibles.map(p => {
-                  const cfg    = PLANTA_BTN[p] ?? { label: `Planta ${p}`, color: "#6b7280", bg: "#f9fafb", dot: "#6b7280" };
+                  const cfg = PLANTA_BTN[p] ?? { label: `Planta ${p}`, color: "#6b7280", bg: "#f9fafb", dot: "#6b7280" };
                   const active = plantaActual === p;
                   const capMax = Math.max(0, ...aulas.filter(a => a.id_building === idBuilding && a.planta?.toLowerCase() === p).map(a => a.capacidad));
                   return (
@@ -575,35 +596,35 @@ function Eventos() {
       <aside className="sidebar">
         <nav className="sidebar-nav">
           <button className="nav-item" onClick={() => navigate("/dashboard")}>
-            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg></span>
             <span className="nav-text">Dashboard</span>
           </button>
           <button className="nav-item" onClick={() => navigate("/usuarios")}>
-            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
             <span className="nav-text">Usuarios</span>
           </button>
           <button className="nav-item active" onClick={() => navigate("/eventos")}>
-            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></span>
             <span className="nav-text">Eventos</span>
           </button>
           <button className="nav-item" onClick={() => navigate("/edificios")}>
-            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 22V12h6v10"/><path d="M3 9h18"/></svg></span>
+            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 22V12h6v10" /><path d="M3 9h18" /></svg></span>
             <span className="nav-text">Edificios</span>
           </button>
           <button className="nav-item" onClick={() => navigate("/divisiones")}>
-            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M3 14h7v7H3z"/><path d="M14 14h7v7h-7z"/></svg></span>
+            <span className="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3h7v7H3z" /><path d="M14 3h7v7h-7z" /><path d="M3 14h7v7H3z" /><path d="M14 14h7v7h-7z" /></svg></span>
             <span className="nav-text">Divisiones</span>
           </button>
         </nav>
         <div className="sidebar-footer">
           <div className="user-profile" onClick={() => setShowLogoutMenu(!showLogoutMenu)}>
-            <div className="user-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div className="user-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></div>
             <span className="user-name">Admin</span>
           </div>
           {showLogoutMenu && (
             <div className="logout-menu">
               <button className="logout-btn" onClick={handleLogout}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
                 Cerrar sesión
               </button>
             </div>
@@ -627,7 +648,7 @@ function Eventos() {
             <div className="header-right" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <GoogleCalendarButton isReady={gcal.isReady} isSignedIn={gcal.isSignedIn} status={gcal.status} onSignIn={gcal.signIn} onSignOut={gcal.signOut} />
               <div className="search-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
                 <input type="text" placeholder="Buscar evento por nombre" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
               </div>
             </div>
@@ -677,13 +698,13 @@ function Eventos() {
                           </button>
                         )}
                         <button className="action-btn" title="Editar" onClick={() => openEditModal(ev)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
                         </button>
                         <button className={`action-btn ${ev.status_event === 0 ? "action-btn-disabled" : ""}`} title="Toggle Status" onClick={() => handleToggleStatus(ev)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx={ev.status_event === 0 ? "8" : "16"} cy="12" r="3"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="5" width="22" height="14" rx="7" ry="7" /><circle cx={ev.status_event === 0 ? "8" : "16"} cy="12" r="3" /></svg>
                         </button>
                         <button className="action-btn" title="Eliminar" style={{ color: "#dc2626" }} onClick={() => handleDelete(ev.id_event, ev.name_event)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" /></svg>
                         </button>
                       </td>
                     </tr>
