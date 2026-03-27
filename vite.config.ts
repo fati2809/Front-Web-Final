@@ -1,22 +1,17 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
-        enabled: true,
-        type: "module",           // importante para dev
+        enabled: true, // permite probar PWA en desarrollo
       },
-
-      // ←←← CAMBIO PRINCIPAL ←←←
-      strategies: "injectManifest",
-      srcDir: "src",
-      filename: "sw.ts",          // Vamos a crear este archivo
-
       manifest: {
         name: "Mapposting",
         short_name: "Mapposting",
@@ -26,8 +21,16 @@ export default defineConfig({
         display: "standalone",
         start_url: "/",
         icons: [
-          { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-          { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+          {
+            src: "/icons/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icons/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
         ],
       },
     }),
@@ -35,5 +38,15 @@ export default defineConfig({
 
   server: {
     port: 5173,
+    proxy: {
+      // Proxy opcional - puedes comentar esto si prefieres usar CORS directo
+      // '/api': {
+      //   target: 'http://localhost:8000',
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/api/, ''),
+      // },
+    },
   },
 });
+
+
