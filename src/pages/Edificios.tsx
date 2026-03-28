@@ -75,6 +75,7 @@ function Edificios() {
     capacidad_planta_baja: "0", capacidad_planta_alta: "0",
   });
 
+  // ── Fetch functions ───────────────────────────────────────────────────────
   const fetchEdificios = () => {
     fetch(`${import.meta.env.VITE_API_URL}/edificios`)
       .then(r => r.json())
@@ -89,7 +90,55 @@ function Edificios() {
       .catch(console.error);
   };
 
-  useEffect(() => { fetchEdificios(); fetchDivisiones(); }, []);
+  // ── Sync offline al reconectar ────────────────────────────────────────────
+  useEffect(() => {
+    const syncPending = async () => {
+      const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
+      if (pending.length === 0) return;
+      try {
+        for (const ed of pending) {
+          await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ed),
+          });
+        }
+        localStorage.removeItem("pending_edificios");
+        fetchEdificios();
+      } catch (err) {
+        console.error("Error sincronizando edificios pendientes", err);
+      }
+    };
+
+    window.addEventListener("online", syncPending);
+    return () => window.removeEventListener("online", syncPending);
+  }, []);
+
+  // ── Montaje inicial ───────────────────────────────────────────────────────
+  useEffect(() => {
+    fetchEdificios();
+    fetchDivisiones();
+
+    const syncPending = async () => {
+      const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
+      if (pending.length === 0) return;
+      try {
+        for (const ed of pending) {
+          await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ed),
+          });
+        }
+        localStorage.removeItem("pending_edificios");
+        fetchEdificios();
+      } catch (err) {
+        console.error("Error sincronizando edificios pendientes", err);
+      }
+    };
+
+    syncPending();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user"); localStorage.removeItem("token");
@@ -101,26 +150,50 @@ function Edificios() {
     (e.code_building ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const buildBody = (form: typeof addForm | typeof editForm) => ({
+    name_building: (form as any).name_building,
+    code_building: (form as any).code_building || null,
+    imagen_url: (form as any).imagen_url || null,
+    lat_building: parseFloat((form as any).lat_building),
+    lon_building: parseFloat((form as any).lon_building),
+    id_div: (form as any).id_div ? parseInt((form as any).id_div) : null,
+    capacidad_planta_baja: parseInt((form as any).capacidad_planta_baja) || 0,
+    capacidad_planta_alta: parseInt((form as any).capacidad_planta_alta) || 0,
+  });
+
+  // ── Crear edificio ────────────────────────────────────────────────────────
   const handleAddSubmit = async () => {
     setModalError("");
+
+    if (!addForm.name_building.trim()) {
+      setModalError("El nombre del edificio es obligatorio.");
+      return;
+    }
+
+    const body = buildBody(addForm);
+
+    // 🔌 SIN INTERNET
+    if (!navigator.onLine) {
+      const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
+      pending.push(body);
+      localStorage.setItem("pending_edificios", JSON.stringify(pending));
+      setShowAddModal(false);
+      setAddForm(emptyAdd);
+      alert("Sin conexión. El edificio se guardará y enviará automáticamente cuando vuelva la conexión.");
+      return;
+    }
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name_building: addForm.name_building,
-          code_building: addForm.code_building || null,
-          imagen_url: addForm.imagen_url || null,
-          lat_building: parseFloat(addForm.lat_building),
-          lon_building: parseFloat(addForm.lon_building),
-          id_div: addForm.id_div ? parseInt(addForm.id_div) : null,
-          capacidad_planta_baja: parseInt(addForm.capacidad_planta_baja) || 0,
-          capacidad_planta_alta: parseInt(addForm.capacidad_planta_alta) || 0,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (res.ok) { setShowAddModal(false); setAddForm(emptyAdd); fetchEdificios(); }
       else setModalError(data.detail || "Error al agregar edificio");
-    } catch { setModalError("No se pudo conectar con el servidor"); }
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
   };
 
   const openEditModal = (e: Edificio) => {
@@ -144,21 +217,14 @@ function Edificios() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
         method: "PUT", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name_building: editForm.name_building,
-          code_building: editForm.code_building || null,
-          imagen_url: editForm.imagen_url || null,
-          lat_building: parseFloat(editForm.lat_building),
-          lon_building: parseFloat(editForm.lon_building),
-          id_div: editForm.id_div ? parseInt(editForm.id_div) : null,
-          capacidad_planta_baja: parseInt(editForm.capacidad_planta_baja) || 0,
-          capacidad_planta_alta: parseInt(editForm.capacidad_planta_alta) || 0,
-        }),
+        body: JSON.stringify(buildBody(editForm)),
       });
       const data = await res.json();
       if (res.ok) { setShowEditModal(false); fetchEdificios(); }
       else setModalError(data.detail || "Error al editar edificio");
-    } catch { setModalError("No se pudo conectar con el servidor"); }
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
   };
 
   const handleDelete = async (id: number, name: string) => {
