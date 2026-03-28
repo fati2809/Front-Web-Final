@@ -41,12 +41,23 @@ interface Aula {
   disponible: boolean;
 }
 
-interface Profesor { id_profe: number; nombre_profe: string; }
-interface Usuario  { id_user: string;  name_user: string;   }
+interface Profesor {
+  id_profe: number;
+  nombre_profe: string;
+}
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
+interface Usuario {
+  id_user: string;
+  name_user: string;
+}
+
+// ── Toast ────────────────────────────────────────────────────────────────────
 type ToastType = "displaced" | "reassigned" | "calendar_success" | "calendar_error";
-interface ToastItem { message: string; type: ToastType; }
+
+interface ToastItem {
+  message: string;
+  type: ToastType;
+}
 
 function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => void }) {
   useEffect(() => {
@@ -55,21 +66,33 @@ function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => v
   }, [onClose]);
 
   const config: Record<ToastType, { border: string; iconBg: string; iconColor: string; titleColor: string; title: string }> = {
-    displaced:        { border: "#f59e0b", iconBg: "#fef3c7", iconColor: "#f59e0b", titleColor: "#92400e", title: "⚡ Evento desplazado por prioridad" },
-    reassigned:       { border: "#3b82f6", iconBg: "#eff6ff", iconColor: "#3b82f6", titleColor: "#1e40af", title: "ℹ️ Evento reasignado automáticamente" },
+    displaced: { border: "#f59e0b", iconBg: "#fef3c7", iconColor: "#f59e0b", titleColor: "#92400e", title: "⚡ Evento desplazado por prioridad" },
+    reassigned: { border: "#3b82f6", iconBg: "#eff6ff", iconColor: "#3b82f6", titleColor: "#1e40af", title: "ℹ️ Evento reasignado automáticamente" },
     calendar_success: { border: "#16a34a", iconBg: "#dcfce7", iconColor: "#16a34a", titleColor: "#14532d", title: "📅 Guardado en Google Calendar" },
-    calendar_error:   { border: "#dc2626", iconBg: "#fee2e2", iconColor: "#dc2626", titleColor: "#7f1d1d", title: "❌ Error en Google Calendar" },
+    calendar_error: { border: "#dc2626", iconBg: "#fee2e2", iconColor: "#dc2626", titleColor: "#7f1d1d", title: "❌ Error en Google Calendar" },
   };
+
   const cfg = config[type];
 
   return (
-    <div style={{ position: "fixed", bottom: "28px", right: "28px", zIndex: 2000, background: "#fff", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.15)", border: `1.5px solid ${cfg.border}`, padding: "16px 20px", maxWidth: "420px", display: "flex", gap: "12px", animation: "slideInToast 0.3s ease" }}>
+    <div style={{
+      position: "fixed", bottom: "28px", right: "28px", zIndex: 2000,
+      background: "#fff", borderRadius: "12px",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+      border: `1.5px solid ${cfg.border}`,
+      padding: "16px 20px", maxWidth: "420px",
+      display: "flex", gap: "12px",
+      animation: "slideInToast 0.3s ease"
+    }}>
       <style>{`@keyframes slideInToast { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`}</style>
-      <div style={{ width: "36px", height: "36px", borderRadius: "50%", flexShrink: 0, backgroundColor: cfg.iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {type === "displaced"        && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>}
-        {type === "reassigned"       && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>}
+      <div style={{
+        width: "36px", height: "36px", borderRadius: "50%", flexShrink: 0,
+        backgroundColor: cfg.iconBg, display: "flex", alignItems: "center", justifyContent: "center"
+      }}>
+        {type === "displaced" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>}
+        {type === "reassigned" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>}
         {type === "calendar_success" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>}
-        {type === "calendar_error"   && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>}
+        {type === "calendar_error" && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cfg.iconColor} strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>}
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: "13px", fontWeight: 700, color: cfg.titleColor, marginBottom: "4px" }}>{cfg.title}</div>
@@ -80,23 +103,38 @@ function WarningToast({ message, type, onClose }: ToastItem & { onClose: () => v
   );
 }
 
-// ── Google Calendar ───────────────────────────────────────────────────────────
+// ── Google Calendar ──────────────────────────────────────────────────────────
 function GoogleCalIcon({ size = 18, color }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect x="3" y="4" width="18" height="18" rx="2" stroke={color || "#1a73e8"} strokeWidth="2"/>
       <line x1="16" y1="2" x2="16" y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="8"  y1="2" x2="8"  y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="3"  y1="10" x2="21" y2="10" stroke={color || "#1a73e8"} strokeWidth="2"/>
+      <line x1="8" y1="2" x2="8" y2="6" stroke={color || "#1a73e8"} strokeWidth="2" strokeLinecap="round"/>
+      <line x1="3" y1="10" x2="21" y2="10" stroke={color || "#1a73e8"} strokeWidth="2"/>
       <text x="12" y="19" textAnchor="middle" fontSize="8" fontWeight="bold" fill={color || "#1a73e8"}>G</text>
     </svg>
   );
 }
 
-function GoogleCalendarButton({ isReady, isSignedIn, status, onSignIn, onSignOut }: { isReady: boolean; isSignedIn: boolean; status: string; onSignIn: () => void; onSignOut: () => void }) {
+function GoogleCalendarButton({ isReady, isSignedIn, status, onSignIn, onSignOut }: {
+  isReady: boolean; isSignedIn: boolean; status: string; onSignIn: () => void; onSignOut: () => void
+}) {
   const loading = status === "loading";
-  if (!isReady) return <button disabled style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 14px", borderRadius: "8px", border: "1px solid #e5e7eb", background: "#f9fafb", color: "#9ca3af", fontSize: "13px", cursor: "not-allowed" }}><GoogleCalIcon size={16} color="#9ca3af" /> Cargando Google…</button>;
-  if (!isSignedIn) return <button onClick={onSignIn} style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 14px", borderRadius: "8px", border: "1px solid #dadce0", background: "#fff", color: "#3c4043", fontSize: "13px", fontWeight: 500, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}><GoogleCalIcon size={16} /> Conectar Google Calendar</button>;
+
+  if (!isReady)
+    return (
+      <button disabled style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 14px", borderRadius: "8px", border: "1px solid #e5e7eb", background: "#f9fafb", color: "#9ca3af", fontSize: "13px", cursor: "not-allowed" }}>
+        <GoogleCalIcon size={16} color="#9ca3af" /> Cargando Google…
+      </button>
+    );
+
+  if (!isSignedIn)
+    return (
+      <button onClick={onSignIn} style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 14px", borderRadius: "8px", border: "1px solid #dadce0", background: "#fff", color: "#3c4043", fontSize: "13px", fontWeight: 500, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+        <GoogleCalIcon size={16} /> Conectar Google Calendar
+      </button>
+    );
+
   return (
     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
       <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
@@ -107,7 +145,7 @@ function GoogleCalendarButton({ isReady, isSignedIn, status, onSignIn, onSignOut
   );
 }
 
-// ── Tabla ─────────────────────────────────────────────────────────────────────
+// ── Tabla ────────────────────────────────────────────────────────────────────
 function PlantaCell({ planta, capacidad }: { planta: string | null; capacidad: number }) {
   const p = (planta || "").toLowerCase();
   const color = p === "baja" ? "#3b82f6" : p === "alta" ? "#8b5cf6" : p === "sotano" ? "#f59e0b" : p === "azotea" ? "#10b981" : "#6b7280";
@@ -123,7 +161,8 @@ function PlantaCell({ planta, capacidad }: { planta: string | null; capacidad: n
 }
 
 function FechaCell({ inicio, fin }: { inicio: string | null; fin: string | null }) {
-  const fmt = (d: string | null) => d ? new Date(d).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" }) : "—";
+  const fmt = (d: string | null) =>
+    d ? new Date(d).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" }) : "—";
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -157,9 +196,16 @@ function PrioridadSelector({ value, onChange }: { value: string; onChange: (v: s
   return (
     <div style={{ display: "flex", gap: "8px" }}>
       {[1, 2, 3].map(n => {
-        const cfg = PRIORIDAD[n]; const active = String(value) === String(n);
+        const cfg = PRIORIDAD[n];
+        const active = String(value) === String(n);
         return (
-          <button key={n} type="button" onClick={() => onChange(String(n))} style={{ flex: 1, padding: "9px 6px", borderRadius: "8px", cursor: "pointer", border: `2px solid ${active ? cfg.dot : "#e5e7eb"}`, backgroundColor: active ? cfg.bg : "#f9fafb", color: cfg.color, fontWeight: 600, fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+          <button key={n} type="button" onClick={() => onChange(String(n))} style={{
+            flex: 1, padding: "9px 6px", borderRadius: "8px", cursor: "pointer",
+            border: `2px solid ${active ? cfg.dot : "#e5e7eb"}`,
+            backgroundColor: active ? cfg.bg : "#f9fafb",
+            color: cfg.color, fontWeight: 600, fontSize: "13px",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "6px"
+          }}>
             <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: cfg.dot }} />{cfg.label}
           </button>
         );
@@ -168,7 +214,7 @@ function PrioridadSelector({ value, onChange }: { value: string; onChange: (v: s
   );
 }
 
-// ── Config de plantas ─────────────────────────────────────────────────────────
+// ── Config de plantas ────────────────────────────────────────────────────────
 const PLANTA_BTN: Record<string, { label: string; color: string; bg: string; dot: string }> = {
   baja:   { label: "Planta baja", color: "#3b82f6", bg: "#eff6ff", dot: "#3b82f6" },
   alta:   { label: "Planta alta", color: "#8b5cf6", bg: "#f5f3ff", dot: "#8b5cf6" },
@@ -176,51 +222,62 @@ const PLANTA_BTN: Record<string, { label: string; color: string; bg: string; dot
   azotea: { label: "Azotea",      color: "#10b981", bg: "#ecfdf5", dot: "#10b981" },
 };
 
-// ── Estilos modales ───────────────────────────────────────────────────────────
-const modalOverlay: React.CSSProperties = { position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };
-const modalCard: React.CSSProperties    = { background: "#fff", borderRadius: "12px", padding: "32px", width: "480px", display: "flex", flexDirection: "column", gap: "14px", maxHeight: "92vh", overflowY: "auto" };
-const inputStyle: React.CSSProperties  = { width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d1d5db", fontSize: "14px", boxSizing: "border-box" };
-const labelStyle: React.CSSProperties  = { fontSize: "12px", fontWeight: 600, color: "#6b7280", marginBottom: "-6px" };
+// ── Estilos modales ──────────────────────────────────────────────────────────
+const modalOverlay: React.CSSProperties = {
+  position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+  backgroundColor: "rgba(0,0,0,0.5)", display: "flex",
+  alignItems: "center", justifyContent: "center", zIndex: 1000
+};
+
+const modalCard: React.CSSProperties = {
+  background: "#fff", borderRadius: "12px", padding: "32px",
+  width: "480px", display: "flex", flexDirection: "column",
+  gap: "14px", maxHeight: "92vh", overflowY: "auto"
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "10px 12px", borderRadius: "8px",
+  border: "1px solid #d1d5db", fontSize: "14px", boxSizing: "border-box"
+};
+
+const labelStyle: React.CSSProperties = {
+  fontSize: "12px", fontWeight: 600, color: "#6b7280", marginBottom: "-6px"
+};
 
 function detectWarningType(msg: string): "displaced" | "reassigned" {
   if (msg.toLowerCase().includes("desplaz") || msg.toLowerCase().includes("prioridad")) return "displaced";
   return "reassigned";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────────────────
 function Eventos() {
   const navigate = useNavigate();
   const gcal = useGoogleCalendar();
 
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
-  const [searchTerm, setSearchTerm]         = useState("");
-  const [eventosData, setEventosData]       = useState<Evento[]>([]);
-  const [edificios, setEdificios]           = useState<Edificio[]>([]);
-  const [aulas, setAulas]                   = useState<Aula[]>([]);
-  const [profesores, setProfesores]         = useState<Profesor[]>([]);
-  const [usuarios, setUsuarios]             = useState<Usuario[]>([]);
-  const [loading, setLoading]               = useState(true);
-  const [modalError, setModalError]         = useState("");
-  const [toast, setToast]                   = useState<ToastItem | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [eventosData, setEventosData] = useState<Evento[]>([]);
+  const [edificios, setEdificios] = useState<Edificio[]>([]);
+  const [aulas, setAulas] = useState<Aula[]>([]);
+  const [profesores, setProfesores] = useState<Profesor[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalError, setModalError] = useState("");
+  const [toast, setToast] = useState<ToastItem | null>(null);
 
   const emptyAdd = {
     name_event: "", id_building: "", id_aula: "", planta_event: "",
-    timedate_event: "", timedate_end: "",
-    id_profe: "", id_user: "", descrip_event: "",
-    img_event: "",
-    capacidad_esperada: "0", prioridad: "1",
+    timedate_event: "", timedate_end: "", id_profe: "", id_user: "",
+    descrip_event: "", img_event: "", capacidad_esperada: "0", prioridad: "1",
   };
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [addForm, setAddForm]           = useState(emptyAdd);
-
+  const [addForm, setAddForm] = useState(emptyAdd);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({
     id_event: 0, name_event: "", id_building: "", id_aula: "", planta_event: "",
-    timedate_event: "", timedate_end: "",
-    id_profe: "", id_user: "", descrip_event: "",
-    img_event: "",
-    capacidad_esperada: "0", prioridad: "1",
+    timedate_event: "", timedate_end: "", id_profe: "", id_user: "",
+    descrip_event: "", img_event: "", capacidad_esperada: "0", prioridad: "1",
     google_event_id: null as string | null,
   });
 
@@ -261,12 +318,18 @@ function Eventos() {
       .catch(console.error);
 
   useEffect(() => {
-    fetchEventos(); fetchEdificios(); fetchAulas(); fetchProfesores(); fetchUsuarios();
+    fetchEventos();
+    fetchEdificios();
+    fetchAulas();
+    fetchProfesores();
+    fetchUsuarios();
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user"); localStorage.removeItem("token");
-    setShowLogoutMenu(false); navigate("/", { replace: true });
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setShowLogoutMenu(false);
+    navigate("/", { replace: true });
   };
 
   const filteredEventos = (Array.isArray(eventosData) ? eventosData : []).filter(e =>
@@ -280,17 +343,17 @@ function Eventos() {
     usuarios.find(u => u.id_user === id)?.name_user ?? (id ? `Usuario ${id.slice(0, 8)}...` : "—");
 
   const buildBody = (form: typeof addForm | typeof editForm) => ({
-    name_event:         form.name_event || null,
-    id_building:        form.id_building ? parseInt(form.id_building) : null,
-    id_aula:            form.id_aula ? parseInt(form.id_aula) : null,
-    timedate_event:     form.timedate_event || null,
-    timedate_end:       form.timedate_end || null,
-    id_profe:           form.id_profe ? parseInt(form.id_profe) : null,
-    id_user:            form.id_user || null,
-    descrip_event:      (form as any).descrip_event || null,
-    img_event:          (form as any).img_event || null,
+    name_event: form.name_event || null,
+    id_building: form.id_building ? parseInt(form.id_building) : null,
+    id_aula: form.id_aula ? parseInt(form.id_aula) : null,
+    timedate_event: form.timedate_event || null,
+    timedate_end: form.timedate_end || null,
+    id_profe: form.id_profe ? parseInt(form.id_profe) : null,
+    id_user: form.id_user || null,
+    descrip_event: (form as any).descrip_event || null,
+    img_event: (form as any).img_event || null,
     capacidad_esperada: parseInt(form.capacidad_esperada) || 0,
-    prioridad:          parseInt(form.prioridad) || 1,
+    prioridad: parseInt(form.prioridad) || 1,
   });
 
   // ── Crear evento ──────────────────────────────────────────────────────────
@@ -302,19 +365,29 @@ function Eventos() {
     }
     const body = buildBody(addForm);
     try {
-      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
+      });
       const data = await res.json();
       if (res.ok) {
         setShowAddModal(false);
         if (data.reasignaciones?.length > 0) {
           const r = data.reasignaciones[0];
-          if (r.reasignado) setTimeout(() => showToast(`"${r.evento_movido}" fue movido a ${r.nombre_edificio_nuevo} por conflicto de prioridad.`, "displaced"), 150);
+          if (r.reasignado)
+            setTimeout(() => showToast(`"${r.evento_movido}" fue movido a ${r.nombre_edificio_nuevo} por conflicto de prioridad.`, "displaced"), 150);
         }
         if (data.warning) setTimeout(() => showToast(data.warning, detectWarningType(data.warning)), 150);
         if (gcal.isSignedIn && addForm.timedate_event) {
           const edificioNombre = edificios.find(e => e.id_building === parseInt(addForm.id_building))?.name_building;
           const aulaSeleccionada = aulas.find(a => a.id_aula === parseInt(addForm.id_aula));
-          const googleId = await gcal.saveEvent({ name_event: addForm.name_event, timedate_event: addForm.timedate_event, timedate_end_event: addForm.timedate_end || null, name_building: edificioNombre ?? null, planta_event: aulaSeleccionada?.planta ?? null, capacidad_event: parseInt(addForm.capacidad_esperada) || 0 });
+          const googleId = await gcal.saveEvent({
+            name_event: addForm.name_event,
+            timedate_event: addForm.timedate_event,
+            timedate_end_event: addForm.timedate_end || null,
+            name_building: edificioNombre ?? null,
+            planta_event: aulaSeleccionada?.planta ?? null,
+            capacidad_event: parseInt(addForm.capacidad_esperada) || 0
+          });
           if (googleId) showToast(`"${addForm.name_event}" agregado a tu Google Calendar.`, "calendar_success");
           else if (gcal.errorMsg) showToast(gcal.errorMsg, "calendar_error");
         }
@@ -323,27 +396,29 @@ function Eventos() {
       } else {
         setModalError(data.detail || data.mensaje || "Error al agregar evento");
       }
-    } catch { setModalError("No se pudo conectar con el servidor"); }
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
   };
 
   // ── Editar evento ─────────────────────────────────────────────────────────
   const openEditModal = (ev: Evento) => {
     setModalError("");
     setEditForm({
-      id_event:           ev.id_event,
-      name_event:         ev.name_event || "",
-      id_building:        ev.id_building ? String(ev.id_building) : "",
-      id_aula:            ev.id_aula ? String(ev.id_aula) : "",
-      planta_event:       ev.aulas?.planta ?? "",
-      timedate_event:     ev.timedate_event ? ev.timedate_event.slice(0, 16) : "",
-      timedate_end:       ev.timedate_end ? ev.timedate_end.slice(0, 16) : "",
-      id_profe:           ev.id_profe ? String(ev.id_profe) : "",
-      id_user:            ev.id_user || "",
-      descrip_event:      ev.descrip_event || "",
-      img_event:          ev.img_event || "",
+      id_event: ev.id_event,
+      name_event: ev.name_event || "",
+      id_building: ev.id_building ? String(ev.id_building) : "",
+      id_aula: ev.id_aula ? String(ev.id_aula) : "",
+      planta_event: ev.aulas?.planta ?? "",
+      timedate_event: ev.timedate_event ? ev.timedate_event.slice(0, 16) : "",
+      timedate_end: ev.timedate_end ? ev.timedate_end.slice(0, 16) : "",
+      id_profe: ev.id_profe ? String(ev.id_profe) : "",
+      id_user: ev.id_user || "",
+      descrip_event: ev.descrip_event || "",
+      img_event: ev.img_event || "",
       capacidad_esperada: String(ev.capacidad_esperada ?? 0),
-      prioridad:          String(ev.prioridad ?? 1),
-      google_event_id:    ev.google_event_id ?? null,
+      prioridad: String(ev.prioridad ?? 1),
+      google_event_id: ev.google_event_id ?? null,
     });
     setShowEditModal(true);
   };
@@ -355,7 +430,9 @@ function Eventos() {
     }
     const body = buildBody(editForm);
     try {
-      const res  = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${editForm.id_event}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${editForm.id_event}`, {
+        method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
+      });
       const data = await res.json();
       if (res.ok) {
         setShowEditModal(false);
@@ -363,7 +440,14 @@ function Eventos() {
         if (gcal.isSignedIn && editForm.google_event_id && editForm.timedate_event) {
           const edificioNombre = edificios.find(e => e.id_building === parseInt(editForm.id_building))?.name_building;
           const aulaSeleccionada = aulas.find(a => a.id_aula === parseInt(editForm.id_aula));
-          const ok = await gcal.updateEvent(editForm.google_event_id, { name_event: editForm.name_event, timedate_event: editForm.timedate_event, timedate_end_event: editForm.timedate_end || null, name_building: edificioNombre ?? null, planta_event: aulaSeleccionada?.planta ?? null, capacidad_event: parseInt(editForm.capacidad_esperada) || 0 });
+          const ok = await gcal.updateEvent(editForm.google_event_id, {
+            name_event: editForm.name_event,
+            timedate_event: editForm.timedate_event,
+            timedate_end_event: editForm.timedate_end || null,
+            name_building: edificioNombre ?? null,
+            planta_event: aulaSeleccionada?.planta ?? null,
+            capacidad_event: parseInt(editForm.capacidad_esperada) || 0
+          });
           if (ok) showToast(`"${editForm.name_event}" actualizado en Google Calendar.`, "calendar_success");
           else if (gcal.errorMsg) showToast(gcal.errorMsg, "calendar_error");
         }
@@ -371,11 +455,20 @@ function Eventos() {
       } else {
         setModalError(data.detail || data.mensaje || "Error al editar evento");
       }
-    } catch { setModalError("No se pudo conectar con el servidor"); }
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
   };
 
   const handleSaveToCalendar = async (ev: Evento) => {
-    const googleId = await gcal.saveEvent({ name_event: ev.name_event, timedate_event: ev.timedate_event ?? "", timedate_end_event: ev.timedate_end, name_building: ev.edificios?.name_building ?? null, planta_event: ev.aulas?.planta ?? null, capacidad_event: ev.capacidad_esperada });
+    const googleId = await gcal.saveEvent({
+      name_event: ev.name_event,
+      timedate_event: ev.timedate_event ?? "",
+      timedate_end_event: ev.timedate_end,
+      name_building: ev.edificios?.name_building ?? null,
+      planta_event: ev.aulas?.planta ?? null,
+      capacidad_event: ev.capacidad_esperada
+    });
     if (googleId) showToast(`"${ev.name_event}" guardado en tu Google Calendar.`, "calendar_success");
     else if (gcal.errorMsg) showToast(gcal.errorMsg, "calendar_error");
   };
@@ -384,24 +477,29 @@ function Eventos() {
     if (!window.confirm(`¿Eliminar el evento "${name}"?`)) return;
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${id}`, { method: "DELETE" });
-      if (res.ok) fetchEventos(); else alert("Error al eliminar el evento");
-    } catch { alert("No se pudo conectar con el servidor"); }
+      if (res.ok) fetchEventos();
+      else alert("Error al eliminar el evento");
+    } catch {
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   const handleToggleStatus = async (ev: Evento) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos/${ev.id_event}/toggle-status`, { method: "PATCH" });
       if (res.ok) fetchEventos();
-    } catch { console.error("Error cambiando estado"); }
+    } catch {
+      console.error("Error cambiando estado");
+    }
   };
 
   // ── Campos del modal ──────────────────────────────────────────────────────
   const ModalFields = (form: typeof addForm | typeof editForm, setForm: React.Dispatch<React.SetStateAction<any>>) => {
-    const idBuilding       = form.id_building ? parseInt(form.id_building) : null;
-    const idAula           = form.id_aula ? parseInt(form.id_aula) : null;
-    const plantaActual     = (form as any).planta_event || "";
+    const idBuilding = form.id_building ? parseInt(form.id_building) : null;
+    const idAula = form.id_aula ? parseInt(form.id_aula) : null;
+    const plantaActual = (form as any).planta_event || "";
     const aulaSeleccionada = aulas.find(a => a.id_aula === idAula) ?? null;
-    const imgUrl           = (form as any).img_event || "";
+    const imgUrl = (form as any).img_event || "";
 
     const plantasDisponibles = idBuilding
       ? [...new Set(
@@ -421,8 +519,8 @@ function Eventos() {
       ? Math.max(0, ...aulas.filter(a => a.id_building === idBuilding && a.planta?.toLowerCase() === plantaActual).map(a => a.capacidad))
       : null;
 
-    const capVal       = parseInt(form.capacidad_esperada) || 0;
-    const overCap      = aulaSeleccionada ? capVal > aulaSeleccionada.capacidad : false;
+    const capVal = parseInt(form.capacidad_esperada) || 0;
+    const overCap = aulaSeleccionada ? capVal > aulaSeleccionada.capacidad : false;
     const plantaCfgSel = PLANTA_BTN[aulaSeleccionada?.planta?.toLowerCase() ?? ""] ?? null;
 
     return (
@@ -431,14 +529,19 @@ function Eventos() {
         <span style={labelStyle}>Nombre del evento *</span>
         <input
           style={{ ...inputStyle, borderColor: !(form as any).name_event?.trim() && modalError ? "#ef4444" : "#d1d5db" }}
-          placeholder="Nombre del evento" value={form.name_event}
+          placeholder="Nombre del evento"
+          value={form.name_event}
           onChange={e => setForm((p: any) => ({ ...p, name_event: e.target.value }))}
         />
 
         {/* Descripción */}
         <span style={labelStyle}>Descripción</span>
-        <input style={inputStyle} placeholder="Descripción (opcional)" value={(form as any).descrip_event || ""}
-          onChange={e => setForm((p: any) => ({ ...p, descrip_event: e.target.value }))} />
+        <input
+          style={inputStyle}
+          placeholder="Descripción (opcional)"
+          value={(form as any).descrip_event || ""}
+          onChange={e => setForm((p: any) => ({ ...p, descrip_event: e.target.value }))}
+        />
 
         {/* Imagen */}
         <span style={labelStyle}>URL de imagen (opcional)</span>
@@ -450,12 +553,8 @@ function Eventos() {
         />
         {imgUrl && (
           <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid #e5e7eb", maxHeight: "120px" }}>
-            <img
-              src={imgUrl}
-              alt="Preview del evento"
-              style={{ width: "100%", maxHeight: "120px", objectFit: "cover", display: "block" }}
-              onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-            />
+            <img src={imgUrl} alt="Preview del evento" style={{ width: "100%", maxHeight: "120px", objectFit: "cover", display: "block" }}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
           </div>
         )}
 
@@ -467,7 +566,7 @@ function Eventos() {
           {edificios.map(ed => <option key={ed.id_building} value={ed.id_building}>{ed.name_building}</option>)}
         </select>
 
-        {/* Plantas — solo si hay edificio */}
+        {/* Plantas */}
         {idBuilding && (
           <>
             <span style={labelStyle}>Planta</span>
@@ -476,14 +575,19 @@ function Eventos() {
             ) : (
               <div style={{ display: "flex", gap: "8px" }}>
                 {plantasDisponibles.map(p => {
-                  const cfg    = PLANTA_BTN[p] ?? { label: `Planta ${p}`, color: "#6b7280", bg: "#f9fafb", dot: "#6b7280" };
+                  const cfg = PLANTA_BTN[p] ?? { label: `Planta ${p}`, color: "#6b7280", bg: "#f9fafb", dot: "#6b7280" };
                   const active = plantaActual === p;
                   const capMax = Math.max(0, ...aulas.filter(a => a.id_building === idBuilding && a.planta?.toLowerCase() === p).map(a => a.capacidad));
                   return (
                     <button key={p} type="button"
                       onClick={() => setForm((prev: any) => ({ ...prev, planta_event: p, id_aula: "" }))}
-                      style={{ flex: 1, padding: "9px 6px", borderRadius: "8px", cursor: "pointer", border: `2px solid ${active ? cfg.dot : "#e5e7eb"}`, backgroundColor: active ? cfg.bg : "#f9fafb", color: cfg.color, fontWeight: 600, fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", transition: "all 0.15s" }}
-                    >
+                      style={{
+                        flex: 1, padding: "9px 6px", borderRadius: "8px", cursor: "pointer",
+                        border: `2px solid ${active ? cfg.dot : "#e5e7eb"}`,
+                        backgroundColor: active ? cfg.bg : "#f9fafb",
+                        color: cfg.color, fontWeight: 600, fontSize: "13px",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", transition: "all 0.15s"
+                      }}>
                       <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: cfg.dot }} />
                       {cfg.label}
                       <span style={{ fontSize: "11px", fontWeight: 400, color: active ? cfg.color : "#9ca3af" }}>hasta {capMax} p.</span>
@@ -495,7 +599,7 @@ function Eventos() {
           </>
         )}
 
-        {/* Aula — solo si hay planta */}
+        {/* Aula */}
         {plantaActual && (
           <>
             <span style={labelStyle}>Aula</span>
@@ -508,9 +612,13 @@ function Eventos() {
                 </option>
               ))}
             </select>
-
             {aulaSeleccionada && plantaCfgSel && (
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", padding: "10px 12px", borderRadius: "8px", backgroundColor: plantaCfgSel.bg, border: `1px solid ${plantaCfgSel.dot}`, fontSize: "12px", color: plantaCfgSel.color, fontWeight: 600 }}>
+              <div style={{
+                display: "flex", gap: "10px", flexWrap: "wrap", padding: "10px 12px",
+                borderRadius: "8px", backgroundColor: plantaCfgSel.bg,
+                border: `1px solid ${plantaCfgSel.dot}`,
+                fontSize: "12px", color: plantaCfgSel.color, fontWeight: 600
+              }}>
                 <span>🏢 Planta: <strong>{aulaSeleccionada.planta}</strong></span>
                 <span>👥 Capacidad: <strong>{aulaSeleccionada.capacidad} personas</strong></span>
                 {aulaSeleccionada.tipo_aula && <span>🏷️ Tipo: <strong>{aulaSeleccionada.tipo_aula}</strong></span>}
@@ -528,8 +636,7 @@ function Eventos() {
         <input
           style={{ ...inputStyle, borderColor: form.timedate_end && form.timedate_event && form.timedate_end <= form.timedate_event ? "#ef4444" : "#d1d5db" }}
           type="datetime-local" value={form.timedate_end} min={form.timedate_event}
-          onChange={e => setForm((p: any) => ({ ...p, timedate_end: e.target.value }))}
-        />
+          onChange={e => setForm((p: any) => ({ ...p, timedate_end: e.target.value }))} />
         {form.timedate_end && form.timedate_event && form.timedate_end <= form.timedate_event && (
           <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>⚠️ La hora de fin debe ser posterior a la de inicio.</span>
         )}
@@ -541,8 +648,7 @@ function Eventos() {
           type="number" min="0"
           placeholder={aulaSeleccionada ? `Máx. ${aulaSeleccionada.capacidad}` : capMaxPlanta ? `Máx. ${capMaxPlanta}` : "Ej: 50"}
           value={form.capacidad_esperada}
-          onChange={e => setForm((p: any) => ({ ...p, capacidad_esperada: e.target.value }))}
-        />
+          onChange={e => setForm((p: any) => ({ ...p, capacidad_esperada: e.target.value }))} />
         {overCap && (
           <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
             ⚠️ Excede la capacidad del aula ({aulaSeleccionada!.capacidad} personas).
@@ -555,14 +661,16 @@ function Eventos() {
 
         {/* Profesor */}
         <span style={labelStyle}>Profesor</span>
-        <select style={inputStyle} value={form.id_profe} onChange={e => setForm((p: any) => ({ ...p, id_profe: e.target.value }))}>
+        <select style={inputStyle} value={form.id_profe}
+          onChange={e => setForm((p: any) => ({ ...p, id_profe: e.target.value }))}>
           <option value="">Seleccionar profesor</option>
           {profesores.map(pr => <option key={pr.id_profe} value={pr.id_profe}>{pr.nombre_profe}</option>)}
         </select>
 
         {/* Usuario */}
         <span style={labelStyle}>Usuario</span>
-        <select style={inputStyle} value={form.id_user} onChange={e => setForm((p: any) => ({ ...p, id_user: e.target.value }))}>
+        <select style={inputStyle} value={form.id_user}
+          onChange={e => setForm((p: any) => ({ ...p, id_user: e.target.value }))}>
           <option value="">Seleccionar usuario</option>
           {usuarios.map(u => <option key={u.id_user} value={u.id_user}>{u.name_user}</option>)}
         </select>
@@ -625,10 +733,14 @@ function Eventos() {
               <button className="btn-primary" onClick={() => { setModalError(""); setShowAddModal(true); }}>Agregar</button>
             </div>
             <div className="header-right" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <GoogleCalendarButton isReady={gcal.isReady} isSignedIn={gcal.isSignedIn} status={gcal.status} onSignIn={gcal.signIn} onSignOut={gcal.signOut} />
+              <GoogleCalendarButton
+                isReady={gcal.isReady} isSignedIn={gcal.isSignedIn}
+                status={gcal.status} onSignIn={gcal.signIn} onSignOut={gcal.signOut}
+              />
               <div className="search-box">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" placeholder="Buscar evento por nombre" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
+                <input type="text" placeholder="Buscar evento por nombre" value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)} className="search-input" />
               </div>
             </div>
           </div>
