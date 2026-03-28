@@ -59,6 +59,19 @@ function Edificios() {
   const [loading, setLoading] = useState(true);
   const [modalError, setModalError] = useState("");
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
   const emptyAdd = {
     name_building: "", code_building: "", imagen_url: "",
     lat_building: "", lon_building: "", id_div: "",
@@ -339,8 +352,8 @@ function Edificios() {
           <button className="nav-item" onClick={() => navigate("/dashboard")}>
             <span className="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
               </svg>
             </span>
             <span className="nav-text">Dashboard</span>
@@ -348,10 +361,10 @@ function Edificios() {
           <button className="nav-item" onClick={() => navigate("/usuarios")}>
             <span className="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
             </span>
             <span className="nav-text">Usuarios</span>
@@ -359,9 +372,9 @@ function Edificios() {
           <button className="nav-item" onClick={() => navigate("/eventos")}>
             <span className="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
             </span>
             <span className="nav-text">Eventos</span>
@@ -369,9 +382,9 @@ function Edificios() {
           <button className="nav-item active" onClick={() => navigate("/edificios")}>
             <span className="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M9 22V12h6v10"/>
-                <path d="M3 9h18"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M9 22V12h6v10" />
+                <path d="M3 9h18" />
               </svg>
             </span>
             <span className="nav-text">Edificios</span>
@@ -379,30 +392,48 @@ function Edificios() {
           <button className="nav-item" onClick={() => navigate("/divisiones")}>
             <span className="nav-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/>
-                <path d="M3 14h7v7H3z"/><path d="M14 14h7v7h-7z"/>
+                <path d="M3 3h7v7H3z" /><path d="M14 3h7v7h-7z" />
+                <path d="M3 14h7v7H3z" /><path d="M14 14h7v7h-7z" />
               </svg>
             </span>
             <span className="nav-text">Divisiones</span>
           </button>
         </nav>
         <div className="sidebar-footer">
-          <div className="user-profile" onClick={() => setShowLogoutMenu(!showLogoutMenu)}>
+          <div
+            className="user-profile"
+            onClick={() => setShowLogoutMenu(!showLogoutMenu)}
+          >
             <div className="user-avatar">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
             <span className="user-name">Admin</span>
+            <span
+              title={isOnline ? "Online" : "Offline"}
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "50%",
+                backgroundColor: isOnline ? "#22c55e" : "#ef4444",
+                flexShrink: 0,
+                marginLeft: "auto",
+                boxShadow: isOnline
+                  ? "0 0 0 2px rgba(34,197,94,0.25)"
+                  : "0 0 0 2px rgba(239,68,68,0.25)",
+                transition: "background-color 0.3s, box-shadow 0.3s",
+              }}
+            />
           </div>
           {showLogoutMenu && (
             <div className="logout-menu">
               <button className="logout-btn" onClick={handleLogout}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
                 Cerrar sesión
               </button>
@@ -429,7 +460,7 @@ function Edificios() {
             <div className="header-right">
               <div className="search-box">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
                 </svg>
                 <input type="text" placeholder="Buscar por nombre o código"
                   value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
@@ -479,17 +510,17 @@ function Edificios() {
                       <td className="cell-actions">
                         <button className="action-btn" title="Editar" onClick={() => openEditModal(ed)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                           </svg>
                         </button>
                         <button className="action-btn" title="Eliminar" style={{ color: "#dc2626" }}
                           onClick={() => handleDelete(ed.id_building, ed.name_building)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6"/><path d="M14 11v6"/>
-                            <path d="M9 6V4h6v2"/>
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                            <path d="M10 11v6" /><path d="M14 11v6" />
+                            <path d="M9 6V4h6v2" />
                           </svg>
                         </button>
                       </td>
