@@ -203,6 +203,44 @@ function Eventos() {
   const [modalError, setModalError] = useState("");
   const [toast, setToast] = useState<ToastItem | null>(null);
 
+  // Añade esto después de los otros useState
+  const [pendingEventos, setPendingEventos] = useState<any[]>([]);
+
+  // Cargar pendientes al montar
+  useEffect(() => {
+    const savedPending = localStorage.getItem("pending_eventos");
+    if (savedPending) {
+      setPendingEventos(JSON.parse(savedPending));
+    }
+  }, []);
+
+  // Sincronizar cuando vuelva internet
+  useEffect(() => {
+    const syncPendingEventos = async () => {
+      const pending = JSON.parse(localStorage.getItem("pending_eventos") || "[]");
+      if (pending.length === 0) return;
+
+      try {
+        for (const evento of pending) {
+          await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(evento),
+          });
+        }
+        localStorage.removeItem("pending_eventos");
+        setPendingEventos([]);
+        fetchEventos(); // recargar lista
+        alert("Los eventos guardados offline se han sincronizado correctamente.");
+      } catch (err) {
+        console.error("Error sincronizando eventos pendientes:", err);
+      }
+    };
+
+    window.addEventListener("online", syncPendingEventos);
+    return () => window.removeEventListener("online", syncPendingEventos);
+  }, []);
+
   const emptyAdd = {
     name_event: "", id_building: "", id_aula: "", planta_event: "",
     timedate_event: "", timedate_end: "",
@@ -296,23 +334,30 @@ function Eventos() {
   // ── Crear evento ──────────────────────────────────────────────────────────
   const handleAddSubmit = async () => {
     setModalError("");
-
     if (!addForm.name_event.trim()) {
       setModalError("El nombre del evento es obligatorio.");
       return;
     }
-
-    if (
-      addForm.timedate_end &&
-      addForm.timedate_event &&
-      addForm.timedate_end <= addForm.timedate_event
-    ) {
+    if (addForm.timedate_end && addForm.timedate_event && addForm.timedate_end <= addForm.timedate_event) {
       setModalError("La fecha/hora de fin debe ser posterior a la de inicio.");
       return;
     }
 
     const body = buildBody(addForm);
 
+    // === OFFLINE ===
+    if (!navigator.onLine) {
+      const pending = JSON.parse(localStorage.getItem("pending_eventos") || "[]");
+      pending.push(body);
+      localStorage.setItem("pending_eventos", JSON.stringify(pending));
+
+      setShowAddModal(false);
+      setAddForm(emptyAdd);
+      alert("Evento guardado offline. Se enviará automáticamente cuando vuelva la conexión.");
+      return;
+    }
+
+    // === ONLINE ===
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
         method: "POST",
@@ -326,23 +371,33 @@ function Eventos() {
         setShowAddModal(false);
         setAddForm(emptyAdd);
         fetchEventos();
+
+        if (gcal.isSignedIn && addForm.timedate_event) {
+          const edificioNombre = edificios.find(e => e.id_building === parseInt(addForm.id_building))?.name_building;
+          const aulaSeleccionada = aulas.find(a => a.id_aula === parseInt(addForm.id_aula));
+
+          const googleId = await gcal.saveEvent({
+            name_event: addForm.name_event,
+            timedate_event: addForm.timedate_event,
+            timedate_end_event: addForm.timedate_end || null,
+            name_building: edificioNombre ?? null,
+            planta_event: aulaSeleccionada?.planta ?? null,
+            capacidad_event: parseInt(addForm.capacidad_esperada) || 0,
+          });
+
+          if (googleId) {
+            alert(`"${addForm.name_event}" se agregó a Google Calendar`);
+          } else if (gcal.errorMsg) {
+            alert(gcal.errorMsg);
+          }
+        }
+
       } else {
         setModalError(data.detail || "Error al agregar evento");
       }
 
     } catch (error) {
-
-      if (!navigator.onLine) {
-        console.log("📴 Offline → request guardado en Background Sync");
-
-        setShowAddModal(false);
-        setAddForm(emptyAdd);
-
-        showToast("Evento guardado offline. Se enviará cuando haya conexión.", "reassigned");
-
-        return;
-      }
-
+      console.error(error);
       setModalError("No se pudo conectar con el servidor");
     }
   };
