@@ -391,7 +391,7 @@ function Eventos() {
             alert(gcal.errorMsg);
           }
         }
-
+        
       } else {
         setModalError(data.detail || "Error al agregar evento");
       }
