@@ -51,6 +51,8 @@ function Usuarios() {
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [addForm, setAddForm] = useState<
+
+
     ModalData & {
       pass_user: string;
       id_division: string;
@@ -67,6 +69,19 @@ function Usuarios() {
     planta_profe: "",
     id_building: "",
   });
+
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState<ModalData & { id_user: string }>({
@@ -371,19 +386,27 @@ function Usuarios() {
             onClick={() => setShowLogoutMenu(!showLogoutMenu)}
           >
             <div className="user-avatar">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
             <span className="user-name">Admin</span>
+            <span
+              title={isOnline ? "Online" : "Offline"}
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "50%",
+                backgroundColor: isOnline ? "#22c55e" : "#ef4444",
+                flexShrink: 0,
+                marginLeft: "auto",
+                boxShadow: isOnline
+                  ? "0 0 0 2px rgba(34,197,94,0.25)"
+                  : "0 0 0 2px rgba(239,68,68,0.25)",
+                transition: "background-color 0.3s, box-shadow 0.3s",
+              }}
+            />
           </div>
           {showLogoutMenu && (
             <div className="logout-menu">
