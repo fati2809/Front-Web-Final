@@ -98,15 +98,11 @@
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   transition: background 150ms ease;
   padding: 4px;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #1f2937;
-  flex: 1;
 }
 
 .user-profile:hover {
@@ -114,15 +110,14 @@
 }
 
 .user-avatar {
-  width: 28px;   /* un poco más pequeño */
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #6b7280;
-  flex-shrink: 0; /* ← que no se comprima */
 }
 
 .user-name {

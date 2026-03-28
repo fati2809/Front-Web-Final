@@ -266,6 +266,19 @@ function Eventos() {
   const [modalError, setModalError] = useState("");
   const [toast, setToast] = useState<ToastItem | null>(null);
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
   const emptyAdd = {
     name_event: "", id_building: "", id_aula: "", planta_event: "",
     timedate_event: "", timedate_end: "", id_profe: "", id_user: "",
@@ -318,28 +331,28 @@ function Eventos() {
       .then(d => setUsuarios(Array.isArray(d) ? d : []))
       .catch(console.error);
 
-      useEffect(() => {
-  const syncPending = async () => {
-    const pending = JSON.parse(localStorage.getItem("pending_eventos") || "[]");
-    if (pending.length === 0) return;
-    try {
-      for (const ev of pending) {
-        await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(ev),
-        });
+  useEffect(() => {
+    const syncPending = async () => {
+      const pending = JSON.parse(localStorage.getItem("pending_eventos") || "[]");
+      if (pending.length === 0) return;
+      try {
+        for (const ev of pending) {
+          await fetch(`${import.meta.env.VITE_API_URL}/eventos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ev),
+          });
+        }
+        localStorage.removeItem("pending_eventos");
+        fetchEventos();
+      } catch (err) {
+        console.error("Error sincronizando eventos pendientes", err);
       }
-      localStorage.removeItem("pending_eventos");
-      fetchEventos();
-    } catch (err) {
-      console.error("Error sincronizando eventos pendientes", err);
-    }
-  };
+    };
 
-  window.addEventListener("online", syncPending);
-  return () => window.removeEventListener("online", syncPending);
-}, []);
+    window.addEventListener("online", syncPending);
+    return () => window.removeEventListener("online", syncPending);
+  }, []);
 
   useEffect(() => {
     fetchEventos();
@@ -762,9 +775,32 @@ function Eventos() {
           </button>
         </nav>
         <div className="sidebar-footer">
-          <div className="user-profile" onClick={() => setShowLogoutMenu(!showLogoutMenu)}>
-            <div className="user-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></div>
+          <div
+            className="user-profile"
+            onClick={() => setShowLogoutMenu(!showLogoutMenu)}
+          >
+            <div className="user-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
             <span className="user-name">Admin</span>
+            <span
+              title={isOnline ? "Online" : "Offline"}
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "50%",
+                backgroundColor: isOnline ? "#22c55e" : "#ef4444",
+                flexShrink: 0,
+                marginLeft: "auto",
+                boxShadow: isOnline
+                  ? "0 0 0 2px rgba(34,197,94,0.25)"
+                  : "0 0 0 2px rgba(239,68,68,0.25)",
+                transition: "background-color 0.3s, box-shadow 0.3s",
+              }}
+            />
           </div>
           {showLogoutMenu && (
             <div className="logout-menu">
