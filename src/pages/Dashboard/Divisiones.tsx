@@ -30,6 +30,19 @@ function Divisiones() {
 
   const [modalError, setModalError] = useState("");
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
   const fetchDivisiones = async () => {
     try {
       setLoading(true);
@@ -43,55 +56,55 @@ function Divisiones() {
   };
 
   useEffect(() => {
-  fetchDivisiones();
+    fetchDivisiones();
 
-  const syncPending = async () => {
-    const pending = JSON.parse(
-      localStorage.getItem("pending_divisiones") || "[]"
-    );
+    const syncPending = async () => {
+      const pending = JSON.parse(
+        localStorage.getItem("pending_divisiones") || "[]"
+      );
 
-    if (pending.length === 0) return;
+      if (pending.length === 0) return;
 
-    try {
-      for (const div of pending) {
-        await createDivision(div);
+      try {
+        for (const div of pending) {
+          await createDivision(div);
+        }
+
+        localStorage.removeItem("pending_divisiones");
+        fetchDivisiones();
+      } catch (err) {
+        console.error("Error sincronizando", err);
       }
+    };
 
-      localStorage.removeItem("pending_divisiones");
-      fetchDivisiones();
-    } catch (err) {
-      console.error("Error sincronizando", err);
-    }
-  };
-
-  syncPending();
-}, []);
+    syncPending();
+  }, []);
 
   useEffect(() => {
-  const syncPending = async () => {
-    const pending = JSON.parse(
-      localStorage.getItem("pending_divisiones") || "[]"
-    );
+    const syncPending = async () => {
+      const pending = JSON.parse(
+        localStorage.getItem("pending_divisiones") || "[]"
+      );
 
-    if (pending.length === 0) return;
+      if (pending.length === 0) return;
 
-    try {
-      for (const div of pending) {
-        await createDivision(div);
+      try {
+        for (const div of pending) {
+          await createDivision(div);
+        }
+
+        localStorage.removeItem("pending_divisiones");
+        fetchDivisiones();
+
+      } catch (err) {
+        console.error("Error sincronizando", err);
       }
+    };
 
-      localStorage.removeItem("pending_divisiones");
-      fetchDivisiones();
+    window.addEventListener("online", syncPending);
 
-    } catch (err) {
-      console.error("Error sincronizando", err);
-    }
-  };
-
-  window.addEventListener("online", syncPending);
-
-  return () => window.removeEventListener("online", syncPending);
-}, []);
+    return () => window.removeEventListener("online", syncPending);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -104,41 +117,41 @@ function Divisiones() {
     d.name_div.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
- const handleAddSubmit = async () => {
-  setModalError("");
+  const handleAddSubmit = async () => {
+    setModalError("");
 
-  if (!addForm.name_div.trim()) {
-    setModalError("El nombre es obligatorio");
-    return;
-  }
+    if (!addForm.name_div.trim()) {
+      setModalError("El nombre es obligatorio");
+      return;
+    }
 
-  // 🔌 SIN INTERNET
-  if (!navigator.onLine) {
-    const pending = JSON.parse(
-      localStorage.getItem("pending_divisiones") || "[]"
-    );
+    // 🔌 SIN INTERNET
+    if (!navigator.onLine) {
+      const pending = JSON.parse(
+        localStorage.getItem("pending_divisiones") || "[]"
+      );
 
-    pending.push(addForm);
+      pending.push(addForm);
 
-    localStorage.setItem("pending_divisiones", JSON.stringify(pending));
+      localStorage.setItem("pending_divisiones", JSON.stringify(pending));
 
-    setShowAddModal(false);
-    setAddForm({ name_div: "" });
+      setShowAddModal(false);
+      setAddForm({ name_div: "" });
 
-    alert("Guardado offline. Se enviará automáticamente.");
-    return;
-  }
+      alert("Guardado offline. Se enviará automáticamente.");
+      return;
+    }
 
-  try {
-    await createDivision(addForm);
+    try {
+      await createDivision(addForm);
 
-    setShowAddModal(false);
-    setAddForm({ name_div: "" });
-    fetchDivisiones();
-  } catch (error: any) {
-    setModalError(error.message || "Error del servidor");
-  }
-};
+      setShowAddModal(false);
+      setAddForm({ name_div: "" });
+      fetchDivisiones();
+    } catch (error: any) {
+      setModalError(error.message || "Error del servidor");
+    }
+  };
 
   const openEditModal = (d: Division) => {
     setModalError("");
@@ -323,19 +336,27 @@ function Divisiones() {
             onClick={() => setShowLogoutMenu(!showLogoutMenu)}
           >
             <div className="user-avatar">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
             <span className="user-name">Admin</span>
+            <span
+              title={isOnline ? "Online" : "Offline"}
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "50%",
+                backgroundColor: isOnline ? "#22c55e" : "#ef4444",
+                flexShrink: 0,
+                marginLeft: "auto",
+                boxShadow: isOnline
+                  ? "0 0 0 2px rgba(34,197,94,0.25)"
+                  : "0 0 0 2px rgba(239,68,68,0.25)",
+                transition: "background-color 0.3s, box-shadow 0.3s",
+              }}
+            />
           </div>
           {showLogoutMenu && (
             <div className="logout-menu">
