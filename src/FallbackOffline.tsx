@@ -1,20 +1,9 @@
 import { useState, useEffect } from "react";
 
 function OfflineFallback({ children }: { children: React.ReactNode }) {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [blockedOnMount] = useState(!navigator.onLine);
 
-  useEffect(() => {
-    const goOnline  = () => setIsOnline(true);
-    const goOffline = () => setIsOnline(false);
-    window.addEventListener("online",  goOnline);
-    window.addEventListener("offline", goOffline);
-    return () => {
-      window.removeEventListener("online",  goOnline);
-      window.removeEventListener("offline", goOffline);
-    };
-  }, []);
-
-  if (isOnline) return <>{children}</>;
+  if (!blockedOnMount) return <>{children}</>;
 
   return (
     <div style={{
@@ -24,7 +13,6 @@ function OfflineFallback({ children }: { children: React.ReactNode }) {
       alignItems: "center", justifyContent: "center",
       gap: "24px", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     }}>
-      {/* Icono */}
       <div style={{
         width: "80px", height: "80px", borderRadius: "50%",
         backgroundColor: "rgba(239,68,68,0.15)",
@@ -42,17 +30,15 @@ function OfflineFallback({ children }: { children: React.ReactNode }) {
         </svg>
       </div>
 
-      {/* Texto */}
       <div style={{ textAlign: "center", display: "flex", flexDirection: "column", gap: "10px" }}>
         <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "#f1f5f9" }}>
           Sin conexión
         </h1>
         <p style={{ margin: 0, fontSize: "15px", color: "#94a3b8", maxWidth: "320px", lineHeight: "1.6" }}>
-          No hay conexión a internet. La aplicación se reanudará automáticamente cuando vuelvas a conectarte.
+          No hay conexión a internet. Recarga la página cuando vuelvas a conectarte.
         </p>
       </div>
 
-      {/* Indicador animado */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <span style={{
           width: "10px", height: "10px", borderRadius: "50%",
