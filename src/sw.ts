@@ -1,5 +1,4 @@
 /// <reference lib="webworker" />
-
 import { precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { NetworkOnly } from "workbox-strategies";
@@ -7,36 +6,24 @@ import { BackgroundSyncPlugin } from "workbox-background-sync";
 
 declare const self: ServiceWorkerGlobalScope;
 
-// ==================== PRECACHE ====================
 precacheAndRoute(self.__WB_MANIFEST);
 
-// ==================== BACKGROUND SYNC ====================
-
-// Cola para peticiones offline
 const bgSyncPlugin = new BackgroundSyncPlugin("form-submissions-queue", {
   maxRetentionTime: 24 * 60, // 24 horas
 });
 
-// ==================== RUTA ÚNICA PARA API ====================
+const apiMatcher = ({ request, url }: { request: Request; url: URL }) =>
+  url.origin === "https://maposting-backend.onrender.com" &&
+  ["POST", "PUT", "PATCH"].includes(request.method);
 
-registerRoute(
-  ({ request, url }) => {
-    return (
-      url.origin === "https://maposting-backend.onrender.com" &&
-      ["POST", "PUT", "PATCH"].includes(request.method)
-    );
-  },
-  new NetworkOnly({
-    plugins: [bgSyncPlugin],
-  }),
-  // 👇 IMPORTANTE: aplicar a múltiples métodos
-  "POST"
-);
+const networkOnlyWithSync = new NetworkOnly({ plugins: [bgSyncPlugin] });
 
-// ==================== LOG DE SYNC ====================
+registerRoute(apiMatcher, networkOnlyWithSync, "POST");
+registerRoute(apiMatcher, networkOnlyWithSync, "PUT");
+registerRoute(apiMatcher, networkOnlyWithSync, "PATCH");
 
 self.addEventListener("sync", (event) => {
   if (event.tag === "form-submissions-queue") {
-    console.log("🔄 Sincronizando datos pendientes...");
+    console.log("Sincronizando datos pendientes...");
   }
 });
