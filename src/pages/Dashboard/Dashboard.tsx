@@ -146,14 +146,15 @@ function Dashboard() {
     value: activeView === "usuarios" ? (d.usuarios ?? 0) : (d.eventos ?? 0),
   }));
 
-  const maxValue = Math.max(...activeData.map((d) => d.value), 1);
+  const rawMax = Math.max(...activeData.map((d) => d.value), 1);
+  // Redondear hacia arriba al entero más bonito
+  const maxValue = rawMax <= 5 ? rawMax : Math.ceil(rawMax / 5) * 5;
+  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * i));
 
-  // Generar puntos del SVG
   const width = 800;
   const height = 250;
-  const padX = 40;
+  const padX = 45;
   const padY = 20;
-
   const points = activeData.map((d, i) => ({
     x:
       activeData.length === 1
@@ -520,32 +521,32 @@ function Dashboard() {
                 </defs>
 
                 {/* Grid lines */}
-                {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
+                {yTicks.map((tick, i) => (
                   <line
                     key={i}
                     x1={padX}
-                    y1={padY + t * (height - padY * 2)}
+                    y1={padY + (1 - tick / maxValue) * (height - padY * 2)}
                     x2={width - padX}
-                    y2={padY + t * (height - padY * 2)}
+                    y2={padY + (1 - tick / maxValue) * (height - padY * 2)}
                     stroke="#e2e8f0"
                     strokeWidth="1"
-                    strokeDasharray={t === 0 ? "0" : "5,5"}
+                    strokeDasharray={i === 0 ? "0" : "5,5"}
                   />
                 ))}
 
                 {/* Y axis labels */}
-                {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
-                  <text
-                    key={i}
-                    x={padX - 8}
-                    y={padY + (1 - t) * (height - padY * 2) + 4}
-                    textAnchor="end"
-                    fontSize="10"
-                    fill="#9ca3af"
-                  >
-                    {Math.round(maxValue * t)}
-                  </text>
-                ))}
+                    {yTicks.map((tick, i) => (
+                      <text
+                        key={i}
+                        x={padX - 8}
+                        y={padY + (1 - tick / maxValue) * (height - padY * 2) + 4}
+                        textAnchor="end"
+                        fontSize="10"
+                        fill="#9ca3af"
+                      >
+                        {tick}
+                      </text>
+                    ))}
 
                 {/* Area fill */}
                 {areaD && <path d={areaD} fill="url(#areaGradient)" />}
