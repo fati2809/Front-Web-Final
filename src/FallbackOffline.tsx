@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function OfflineFallback({ children }: { children: React.ReactNode }) {
     const [blockedOnMount] = useState(() => {
