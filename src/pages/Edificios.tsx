@@ -182,6 +182,14 @@ function Edificios() {
       setModalError("El nombre del edificio es obligatorio.");
       return;
     }
+    if (!addForm.lat_building || isNaN(parseFloat(addForm.lat_building))) {
+      setModalError("La latitud es obligatoria y debe ser un número válido.");
+      return;
+    }
+    if (!addForm.lon_building || isNaN(parseFloat(addForm.lon_building))) {
+      setModalError("La longitud es obligatoria y debe ser un número válido.");
+      return;
+    }
 
     const body = buildBody(addForm);
 
