@@ -414,12 +414,15 @@ function Eventos() {
     prioridad: parseInt(form.prioridad) || 1,
   });
 
+
   // ── Crear evento ──────────────────────────────────────────────────────────
   const handleAddSubmit = async () => {
     setModalError("");
     if (!addForm.name_event.trim()) { setModalError("El nombre del evento es obligatorio."); return; }
     if (!addForm.timedate_event) { setModalError("La fecha y hora de inicio son obligatorias."); return; }
     if (!addForm.id_building) { setModalError("Debes seleccionar un edificio."); return; }
+    if (addForm.timedate_end && addForm.timedate_event && addForm.timedate_end <= addForm.timedate_event) {
+      setModalError("La fecha/hora de fin debe ser posterior a la de inicio."); return;
     }
 
     const body = buildBody(addForm);
