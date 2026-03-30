@@ -362,14 +362,7 @@ function Dashboard() {
           <div className="chart-header">
             <div className="chart-tabs">
               <button
-                className={`chart-tab ${activeView === "usuarios" ? "active" : ""}`}
-                onClick={() => setActiveView("usuarios")}
-              >
-                Usuarios
-              </button>
-              <button
-                className={`chart-tab ${activeView === "eventos" ? "active" : ""}`}
-                onClick={() => setActiveView("eventos")}
+                className="chart-tab active"
               >
                 Eventos
               </button>
