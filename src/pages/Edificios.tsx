@@ -175,47 +175,51 @@ function Edificios() {
   });
 
   // ── Crear edificio ────────────────────────────────────────────────────────
-  const handleAddSubmit = async () => {
-    setModalError("");
+const handleAddSubmit = async () => {
+  setModalError("");
 
-    if (!addForm.name_building.trim()) {
-      setModalError("El nombre del edificio es obligatorio.");
-      return;
-    }
-    if (!addForm.lat_building || isNaN(parseFloat(addForm.lat_building))) {
-      setModalError("La latitud es obligatoria y debe ser un número válido.");
-      return;
-    }
-    if (!addForm.lon_building || isNaN(parseFloat(addForm.lon_building))) {
-      setModalError("La longitud es obligatoria y debe ser un número válido.");
-      return;
-    }
+  if (!addForm.name_building.trim()) {
+    setModalError("El nombre del edificio es obligatorio.");
+    return;
+  }
 
-    const body = buildBody(addForm);
+  const lat = parseFloat(addForm.lat_building);
+  const lon = parseFloat(addForm.lon_building);
 
-    // 🔌 SIN INTERNET
-    if (!navigator.onLine) {
-      const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
-      pending.push(body);
-      localStorage.setItem("pending_edificios", JSON.stringify(pending));
-      setShowAddModal(false);
-      setAddForm(emptyAdd);
-      alert("Sin conexión. El edificio se guardará y enviará automáticamente cuando vuelva la conexión.");
-      return;
-    }
+  if (!addForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
+    setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
+    return;
+  }
+  if (!addForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
+    setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
+    return;
+  }
 
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      if (res.ok) { setShowAddModal(false); setAddForm(emptyAdd); fetchEdificios(); }
-      else setModalError(data.detail || "Error al agregar edificio");
-    } catch {
-      setModalError("No se pudo conectar con el servidor");
-    }
-  };
+  const body = buildBody(addForm);
+
+  // 🔌 SIN INTERNET
+  if (!navigator.onLine) {
+    const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
+    pending.push(body);
+    localStorage.setItem("pending_edificios", JSON.stringify(pending));
+    setShowAddModal(false);
+    setAddForm(emptyAdd);
+    alert("Sin conexión. El edificio se guardará y enviará automáticamente cuando vuelva la conexión.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) { setShowAddModal(false); setAddForm(emptyAdd); fetchEdificios(); }
+    else setModalError(data.detail || "Error al agregar edificio");
+  } catch {
+    setModalError("No se pudo conectar con el servidor");
+  }
+};
 
   const openEditModal = (e: Edificio) => {
     setModalError("");
@@ -234,19 +238,37 @@ function Edificios() {
   };
 
   const handleEditSubmit = async () => {
-    setModalError("");
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
-        method: "PUT", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buildBody(editForm)),
-      });
-      const data = await res.json();
-      if (res.ok) { setShowEditModal(false); fetchEdificios(); }
-      else setModalError(data.detail || "Error al editar edificio");
-    } catch {
-      setModalError("No se pudo conectar con el servidor");
-    }
-  };
+  setModalError("");
+
+  if (!editForm.name_building.trim()) {
+    setModalError("El nombre del edificio es obligatorio.");
+    return;
+  }
+
+  const lat = parseFloat(editForm.lat_building);
+  const lon = parseFloat(editForm.lon_building);
+
+  if (!editForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
+    setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
+    return;
+  }
+  if (!editForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
+    setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
+      method: "PUT", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildBody(editForm)),
+    });
+    const data = await res.json();
+    if (res.ok) { setShowEditModal(false); fetchEdificios(); }
+    else setModalError(data.detail || "Error al editar edificio");
+  } catch {
+    setModalError("No se pudo conectar con el servidor");
+  }
+};
 
   const handleDelete = async (id: number, name: string) => {
     if (!window.confirm(`¿Eliminar el edificio "${name}"?`)) return;
