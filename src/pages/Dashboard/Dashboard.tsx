@@ -11,9 +11,7 @@ interface GraficaData {
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [activeView, setActiveView] = useState<"usuarios" | "eventos">(
-    "usuarios",
-  );
+  const [activeView] = useState<"usuarios" | "eventos">("eventos");
   const [periodo, setPeriodo] = useState<"dia" | "semana" | "mes">("semana");
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
