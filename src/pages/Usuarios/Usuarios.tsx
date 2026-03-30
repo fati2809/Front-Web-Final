@@ -440,17 +440,8 @@ function Usuarios() {
         <div className="content-card">
           <div className="content-header">
             <div className="header-left">
-              <h2 className="content-title">Usuarios</h2>
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  setModalError("");
-                  setShowAddModal(true);
-                }}
-              >
-                Agregar
-              </button>
-            </div>
+          <h2 className="content-title">Usuarios</h2>
+        </div>
             <div className="header-right">
               <div className="search-box">
                 <svg
