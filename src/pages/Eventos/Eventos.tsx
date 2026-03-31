@@ -423,6 +423,9 @@ function Eventos() {
     if (!addForm.id_building) { setModalError("Debes seleccionar un edificio."); return; }
     if (!addForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
     if (!addForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
+    if (addForm.img_event && !/\.(jpg|jpeg|png)$/i.test(addForm.img_event)) {
+      setModalError("La URL de la imagen debe terminar en .jpg, .jpeg o .png"); return;
+    }
     if (addForm.timedate_event && addForm.timedate_event < new Date().toISOString().slice(0, 16)) {
       setModalError("La fecha de inicio no puede ser en el pasado."); return;
     }
@@ -502,6 +505,9 @@ function Eventos() {
     setModalError("");
     if (!editForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
     if (!editForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
+    if (editForm.img_event && !/\.(jpg|jpeg|png)$/i.test(editForm.img_event)) {
+      setModalError("La URL de la imagen debe terminar en .jpg, .jpeg o .png"); return;
+    }
     if (editForm.timedate_event && editForm.timedate_event < new Date().toISOString().slice(0, 16)) {
       setModalError("La fecha de inicio no puede ser en el pasado."); return;
     }
