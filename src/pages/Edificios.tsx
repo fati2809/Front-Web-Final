@@ -364,7 +364,7 @@ function Edificios() {
       <input
         style={{
           ...inputStyle,
-          borderColor: (form as any).code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test((form as any).code_building) ? "#ef4444" : "#d1d5db"
+          borderColor: (form as any).code_building && !/^[A-Z]{2,4}-[A-Z0-9]{2}$/.test((form as any).code_building) ? "#ef4444" : "#d1d5db"
         }}
         placeholder="Ej: ED-01"
         value={(form as any).code_building}
@@ -374,9 +374,9 @@ function Edificios() {
           setForm((p: any) => ({ ...p, code_building: val }));
         }}
       />
-      {(form as any).code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test((form as any).code_building) && (
+      {(form as any).code_building && !/^[A-Z]{2,4}-[A-Z0-9]{2}$/.test((form as any).code_building) && (
         <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
-          Formato esperado: 2–4 letras, guion, 2–3 números. Ej: ED-01, EDIF-001
+          Formato esperado: 2–4 letras, guion, 2 letras o números. Ej: ED-01, EDIF-A1
         </span>
       )}
 
