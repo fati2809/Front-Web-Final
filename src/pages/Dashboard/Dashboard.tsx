@@ -145,9 +145,8 @@ function Dashboard() {
   }));
 
   const rawMax = Math.max(...activeData.map((d) => d.value), 1);
-  // Redondear hacia arriba al entero más bonito
   const maxValue = rawMax <= 5 ? rawMax : Math.ceil(rawMax / 5) * 5;
-const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * (4 - i)));
+  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * (4 - i)));
 
   const width = 800;
   const height = 250;
@@ -526,18 +525,18 @@ const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * (
                 ))}
 
                 {/* Y axis labels */}
-                    {yTicks.map((tick, i) => (
-                      <text
-                        key={i}
-                        x={padX - 8}
-                        y={padY + (1 - tick / maxValue) * (height - padY * 2) + 4}
-                        textAnchor="end"
-                        fontSize="10"
-                        fill="#9ca3af"
-                      >
-                        {tick}
-                      </text>
-                    ))}
+                {yTicks.map((tick, i) => (
+                  <text
+                    key={i}
+                    x={padX - 8}
+                    y={padY + (1 - tick / maxValue) * (height - padY * 2) + 4}
+                    textAnchor="end"
+                    fontSize="10"
+                    fill="#9ca3af"
+                  >
+                    {tick}
+                  </text>
+                ))}
 
                 {/* Area fill */}
                 {areaD && <path d={areaD} fill="url(#areaGradient)" />}
