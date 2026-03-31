@@ -370,7 +370,7 @@ function Edificios() {
         value={(form as any).code_building}
         onChange={(e) => {
           const val = e.target.value.toUpperCase();
-          if (!/^[A-Z0-9-]*$/.test(val)) return;
+          if (!/^[A-Z]{0,4}(-\d{0,3})?$/.test(val)) return;
           setForm((p: any) => ({ ...p, code_building: val }));
         }}
       />
