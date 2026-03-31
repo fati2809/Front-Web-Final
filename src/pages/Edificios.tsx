@@ -185,6 +185,13 @@ function Edificios() {
 
     const lat = parseFloat(addForm.lat_building);
     const lon = parseFloat(addForm.lon_building);
+    const form = addForm;
+    if (form.imagen_url && !/\.(jpg|jpeg|png)$/i.test(form.imagen_url)) {
+      setModalError("La URL de imagen debe terminar en .jpg, .jpeg o .png"); return;
+    }
+    if (form.code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test(form.code_building)) {
+      setModalError("El código debe tener el formato correcto. Ej: ED-01"); return;
+    }
 
     if (!addForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
       setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
@@ -247,6 +254,13 @@ function Edificios() {
 
     const lat = parseFloat(editForm.lat_building);
     const lon = parseFloat(editForm.lon_building);
+    const form = editForm;
+    if (form.imagen_url && !/\.(jpg|jpeg|png)$/i.test(form.imagen_url)) {
+      setModalError("La URL de imagen debe terminar en .jpg, .jpeg o .png"); return;
+    }
+    if (form.code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test(form.code_building)) {
+      setModalError("El código debe tener el formato correcto. Ej: ED-01"); return;
+    }
 
     if (!editForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
       setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
@@ -347,8 +361,24 @@ function Edificios() {
         onChange={(e) => setForm((p: any) => ({ ...p, name_building: e.target.value }))} />
 
       <span style={labelStyle}>Código</span>
-      <input style={inputStyle} placeholder="Ej: ED-01" value={(form as any).code_building}
-        onChange={(e) => setForm((p: any) => ({ ...p, code_building: e.target.value }))} />
+      <input
+        style={{
+          ...inputStyle,
+          borderColor: (form as any).code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test((form as any).code_building) ? "#ef4444" : "#d1d5db"
+        }}
+        placeholder="Ej: ED-01"
+        value={(form as any).code_building}
+        onChange={(e) => {
+          const val = e.target.value.toUpperCase();
+          if (!/^[A-Z0-9-]*$/.test(val)) return;
+          setForm((p: any) => ({ ...p, code_building: val }));
+        }}
+      />
+      {(form as any).code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test((form as any).code_building) && (
+        <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
+          Formato esperado: 2–4 letras, guion, 2–3 números. Ej: ED-01, EDIF-001
+        </span>
+      )}
 
       <span style={labelStyle}>División</span>
       <select style={selectStyle} value={(form as any).id_div}
@@ -365,14 +395,13 @@ function Edificios() {
       <input
         style={inputStyle}
         placeholder="Ej: 20.5888"
-        type="number"
-        step="0.000001"
-        min="-90"
-        max="90"
+        type="text"
+        inputMode="decimal"
         value={(form as any).lat_building}
         onChange={(e) => {
           const val = e.target.value;
-          if (val.includes(".") && val.split(".")[1]?.length > 6) return;
+          if (val === "" || val === "-") { setForm((p: any) => ({ ...p, lat_building: val })); return; }
+          if (!/^-?\d{0,2}(\.\d{0,6})?$/.test(val)) return;
           setForm((p: any) => ({ ...p, lat_building: val }));
         }}
       />
@@ -381,21 +410,39 @@ function Edificios() {
       <input
         style={inputStyle}
         placeholder="Ej: -100.3899"
-        type="number"
-        step="0.00000001"
-        min="-180"
-        max="180"
+        type="text"
+        inputMode="decimal"
         value={(form as any).lon_building}
         onChange={(e) => {
           const val = e.target.value;
-          if (val.includes(".") && val.split(".")[1]?.length > 8) return;
+          if (val === "" || val === "-") { setForm((p: any) => ({ ...p, lon_building: val })); return; }
+          if (!/^-?\d{0,3}(\.\d{0,6})?$/.test(val)) return;
           setForm((p: any) => ({ ...p, lon_building: val }));
         }}
       />
 
       <span style={labelStyle}>URL de imagen</span>
-      <input style={inputStyle} placeholder="https://..." value={(form as any).imagen_url}
-        onChange={(e) => setForm((p: any) => ({ ...p, imagen_url: e.target.value }))} />
+      <input
+        style={{
+          ...inputStyle,
+          borderColor: (form as any).imagen_url && !/\.(jpg|jpeg|png)$/i.test((form as any).imagen_url) ? "#ef4444" : "#d1d5db"
+        }}
+        placeholder="https://ejemplo.com/imagen.jpg"
+        value={(form as any).imagen_url}
+        onChange={(e) => setForm((p: any) => ({ ...p, imagen_url: e.target.value }))}
+      />
+      {(form as any).imagen_url && !/\.(jpg|jpeg|png)$/i.test((form as any).imagen_url) && (
+        <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
+          Solo se permiten imágenes con extensión .jpg, .jpeg o .png
+        </span>
+      )}
+      {(form as any).imagen_url && /\.(jpg|jpeg|png)$/i.test((form as any).imagen_url) && (
+        <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid #e5e7eb", maxHeight: "120px" }}>
+          <img src={(form as any).imagen_url} alt="Preview"
+            style={{ width: "100%", maxHeight: "120px", objectFit: "cover", display: "block" }}
+            onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+        </div>
+      )}
     </>
   );
 
