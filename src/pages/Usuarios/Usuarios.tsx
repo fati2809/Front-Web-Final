@@ -218,14 +218,14 @@ function Usuarios() {
     }
   };
 
-  const handleDelete = async (id_user: number, name_user: string) => {
+  const handleDelete = async (id_user: string, name_user: string) => {
     if (!window.confirm(`¿Estás seguro de eliminar a "${name_user}"?`)) return;
     try {
-      await deleteUsuario(String(id_user));
-      fetchUsuarios();
+      await deleteUsuario(id_user);
     } catch {
       alert("Error al eliminar el usuario");
     }
+    fetchUsuarios();
   };
 
   const modalStyle: React.CSSProperties = {
@@ -524,7 +524,7 @@ function Usuarios() {
                           title="Eliminar"
                           style={{ color: "#dc2626" }}
                           onClick={() =>
-                            handleDelete(Number(usuario.id_user), usuario.name_user)
+                            handleDelete(usuario.id_user, usuario.name_user)
                           }
                         >
                           <svg
