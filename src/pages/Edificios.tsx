@@ -202,6 +202,10 @@ function Edificios() {
       return;
     }
 
+    if (!addForm.code_building.trim()) {
+      setModalError("El código del edificio es obligatorio. Ej: ED-01"); return;
+    }
+
     const body = buildBody(addForm);
 
     // 🔌 SIN INTERNET
@@ -269,6 +273,10 @@ function Edificios() {
     if (!editForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
       setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
       return;
+    }
+
+    if (!editForm.code_building.trim()) {
+      setModalError("El código del edificio es obligatorio. Ej: ED-01"); return;
     }
 
     try {
