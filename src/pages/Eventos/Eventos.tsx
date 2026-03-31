@@ -624,20 +624,29 @@ function Eventos() {
         {/* Imagen */}
         <span style={labelStyle}>URL de imagen (opcional)</span>
         <input
-          style={inputStyle}
+          style={{
+            ...inputStyle,
+            borderColor: imgUrl && !/\.(jpg|jpeg|png)$/i.test(imgUrl) ? "#ef4444" : "#d1d5db"
+          }}
           placeholder="https://ejemplo.com/imagen.jpg"
           value={imgUrl}
           onChange={e => setForm((p: any) => ({ ...p, img_event: e.target.value }))}
         />
-        {imgUrl && (
+        {imgUrl && !/\.(jpg|jpeg|png)$/i.test(imgUrl) && (
+          <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
+            ⚠️ Solo se permiten imágenes con extensión .jpg, .jpeg o .png
+          </span>
+        )}
+        {imgUrl && /\.(jpg|jpeg|png)$/i.test(imgUrl) && (
           <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid #e5e7eb", maxHeight: "120px" }}>
-            <img src={imgUrl} alt="Preview del evento" style={{ width: "100%", maxHeight: "120px", objectFit: "cover", display: "block" }}
+            <img src={imgUrl} alt="Preview del evento"
+              style={{ width: "100%", maxHeight: "120px", objectFit: "cover", display: "block" }}
               onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
           </div>
         )}
 
         {/* Edificio */}
-        <span style={labelStyle}>Edificio</span>
+        <span style={labelStyle}>Edificio *</span>
         <select style={inputStyle} value={form.id_building}
           onChange={e => setForm((p: any) => ({ ...p, id_building: e.target.value, planta_event: "", id_aula: "" }))}>
           <option value="">Seleccionar edificio</option>
@@ -706,7 +715,7 @@ function Eventos() {
         )}
 
         {/* Fechas */}
-        <span style={labelStyle}>Fecha y hora de inicio</span>
+        <span style={labelStyle}>Fecha y hora de inicio *</span>
         <input style={inputStyle} type="datetime-local" value={form.timedate_event}
           min={nowLocal}
           onChange={e => setForm((p: any) => ({ ...p, timedate_event: e.target.value }))} />
@@ -739,7 +748,7 @@ function Eventos() {
         <PrioridadSelector value={form.prioridad} onChange={v => setForm((p: any) => ({ ...p, prioridad: v }))} />
 
         {/* Profesor */}
-        <span style={labelStyle}>Profesor</span>
+        <span style={labelStyle}>Profesor *</span>
         <select style={inputStyle} value={form.id_profe}
           onChange={e => setForm((p: any) => ({ ...p, id_profe: e.target.value }))}>
           <option value="">Seleccionar profesor</option>
@@ -747,7 +756,7 @@ function Eventos() {
         </select>
 
         {/* Usuario */}
-        <span style={labelStyle}>Usuario</span>
+        <span style={labelStyle}>Usuario *</span>
         <select style={inputStyle} value={form.id_user}
           onChange={e => setForm((p: any) => ({ ...p, id_user: e.target.value }))}>
           <option value="">Seleccionar usuario</option>
