@@ -189,8 +189,8 @@ function Edificios() {
     if (form.imagen_url && !/\.(jpg|jpeg|png)$/i.test(form.imagen_url)) {
       setModalError("La URL de imagen debe terminar en .jpg, .jpeg o .png"); return;
     }
-    if (form.code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test(form.code_building)) {
-      setModalError("El código debe tener el formato correcto. Ej: ED-01"); return;
+    if (form.code_building && !/^[A-Z]{2,4}-[A-Z0-9]{2}$/.test(form.code_building)) {
+      setModalError("El código debe tener el formato correcto. Ej: ED-01, EDIF-A1"); return;
     }
 
     if (!addForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
@@ -258,8 +258,8 @@ function Edificios() {
     if (form.imagen_url && !/\.(jpg|jpeg|png)$/i.test(form.imagen_url)) {
       setModalError("La URL de imagen debe terminar en .jpg, .jpeg o .png"); return;
     }
-    if (form.code_building && !/^[A-Z]{2,4}-\d{2,3}$/.test(form.code_building)) {
-      setModalError("El código debe tener el formato correcto. Ej: ED-01"); return;
+    if (form.code_building && !/^[A-Z]{2,4}-[A-Z0-9]{2}$/.test(form.code_building)) {
+      setModalError("El código debe tener el formato correcto. Ej: ED-01, EDIF-A1"); return;
     }
 
     if (!editForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
@@ -370,7 +370,7 @@ function Edificios() {
         value={(form as any).code_building}
         onChange={(e) => {
           const val = e.target.value.toUpperCase();
-          if (!/^[A-Z]{0,4}(-\d{0,3})?$/.test(val)) return;
+          if (!/^[A-Z]{0,4}(-[A-Z0-9]{0,2})?$/.test(val)) return;
           setForm((p: any) => ({ ...p, code_building: val }));
         }}
       />
