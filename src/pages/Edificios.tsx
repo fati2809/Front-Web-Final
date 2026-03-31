@@ -393,7 +393,10 @@ function Edificios() {
 
       <span style={labelStyle}>Latitud</span>
       <input
-        style={inputStyle}
+        style={{
+          ...inputStyle,
+          borderColor: (form as any).lat_building && (parseFloat((form as any).lat_building) < -90 || parseFloat((form as any).lat_building) > 90) ? "#ef4444" : "#d1d5db"
+        }}
         placeholder="Ej: 20.5888"
         type="text"
         inputMode="decimal"
@@ -405,10 +408,18 @@ function Edificios() {
           setForm((p: any) => ({ ...p, lat_building: val }));
         }}
       />
+      {(form as any).lat_building && (parseFloat((form as any).lat_building) < -90 || parseFloat((form as any).lat_building) > 90) && (
+        <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
+          La latitud debe estar entre -90 y 90
+        </span>
+      )}
 
       <span style={labelStyle}>Longitud</span>
       <input
-        style={inputStyle}
+        style={{
+          ...inputStyle,
+          borderColor: (form as any).lon_building && (parseFloat((form as any).lon_building) < -180 || parseFloat((form as any).lon_building) > 180) ? "#ef4444" : "#d1d5db"
+        }}
         placeholder="Ej: -100.3899"
         type="text"
         inputMode="decimal"
@@ -420,6 +431,11 @@ function Edificios() {
           setForm((p: any) => ({ ...p, lon_building: val }));
         }}
       />
+      {(form as any).lon_building && (parseFloat((form as any).lon_building) < -180 || parseFloat((form as any).lon_building) > 180) && (
+        <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
+          La longitud debe estar entre -180 y 180
+        </span>
+      )}
 
       <span style={labelStyle}>URL de imagen</span>
       <input
