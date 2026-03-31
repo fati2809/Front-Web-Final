@@ -420,6 +420,7 @@ function Eventos() {
     setModalError("");
     if (!addForm.name_event.trim()) { setModalError("El nombre del evento es obligatorio."); return; }
     if (!addForm.timedate_event) { setModalError("La fecha y hora de inicio son obligatorias."); return; }
+    if (!addForm.timedate_end) { setModalError("La fecha y hora de fin son obligatorias."); return; }
     if (!addForm.id_building) { setModalError("Debes seleccionar un edificio."); return; }
     if (!addForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
     if (!addForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
@@ -428,6 +429,9 @@ function Eventos() {
     }
     if (addForm.timedate_event && addForm.timedate_event < new Date().toISOString().slice(0, 16)) {
       setModalError("La fecha de inicio no puede ser en el pasado."); return;
+    }
+    if (addForm.timedate_end && addForm.timedate_end < new Date().toISOString().slice(0, 16)) {
+      setModalError("La fecha de fin no puede ser en el pasado."); return;
     }
 
     const body = buildBody(addForm);
@@ -503,6 +507,10 @@ function Eventos() {
 
   const handleEditSubmit = async () => {
     setModalError("");
+    if (!editForm.name_event.trim()) { setModalError("El nombre del evento es obligatorio."); return; }
+    if (!editForm.timedate_event) { setModalError("La fecha y hora de inicio son obligatorias."); return; }
+    if (!editForm.timedate_end) { setModalError("La fecha y hora de fin son obligatorias."); return; }
+    if (!editForm.id_building) { setModalError("Debes seleccionar un edificio."); return; }
     if (!editForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
     if (!editForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
     if (editForm.img_event && !/\.(jpg|jpeg|png)$/i.test(editForm.img_event)) {
@@ -510,6 +518,9 @@ function Eventos() {
     }
     if (editForm.timedate_event && editForm.timedate_event < new Date().toISOString().slice(0, 16)) {
       setModalError("La fecha de inicio no puede ser en el pasado."); return;
+    }
+    if (editForm.timedate_end && editForm.timedate_end < new Date().toISOString().slice(0, 16)) {
+      setModalError("La fecha de fin no puede ser en el pasado."); return;
     }
     const body = buildBody(editForm);
     try {
@@ -650,6 +661,7 @@ function Eventos() {
               onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
           </div>
         )}
+        
 
         {/* Edificio */}
         <span style={labelStyle}>Edificio *</span>
@@ -732,7 +744,7 @@ function Eventos() {
           type="datetime-local" value={form.timedate_end} min={form.timedate_event || nowLocal}
           onChange={e => setForm((p: any) => ({ ...p, timedate_end: e.target.value }))} />
         {form.timedate_end && form.timedate_event && form.timedate_end <= form.timedate_event && (
-          <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>⚠️ La hora de fin debe ser posterior a la de inicio.</span>
+          <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>La hora de fin debe ser posterior a la de inicio.</span>
         )}
 
         {/* Capacidad */}
