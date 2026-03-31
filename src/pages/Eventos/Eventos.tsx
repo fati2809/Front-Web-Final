@@ -640,7 +640,7 @@ function Eventos() {
         />
         {imgUrl && !/\.(jpg|jpeg|png)$/i.test(imgUrl) && (
           <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>
-            ⚠️ Solo se permiten imágenes con extensión .jpg, .jpeg o .png
+            Solo se permiten imágenes con extensión .jpg, .jpeg o .png
           </span>
         )}
         {imgUrl && /\.(jpg|jpeg|png)$/i.test(imgUrl) && (

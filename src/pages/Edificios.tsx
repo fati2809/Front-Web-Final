@@ -175,51 +175,51 @@ function Edificios() {
   });
 
   // ── Crear edificio ────────────────────────────────────────────────────────
-const handleAddSubmit = async () => {
-  setModalError("");
+  const handleAddSubmit = async () => {
+    setModalError("");
 
-  if (!addForm.name_building.trim()) {
-    setModalError("El nombre del edificio es obligatorio.");
-    return;
-  }
+    if (!addForm.name_building.trim()) {
+      setModalError("El nombre del edificio es obligatorio.");
+      return;
+    }
 
-  const lat = parseFloat(addForm.lat_building);
-  const lon = parseFloat(addForm.lon_building);
+    const lat = parseFloat(addForm.lat_building);
+    const lon = parseFloat(addForm.lon_building);
 
-  if (!addForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
-    setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
-    return;
-  }
-  if (!addForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
-    setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
-    return;
-  }
+    if (!addForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
+      setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
+      return;
+    }
+    if (!addForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
+      setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
+      return;
+    }
 
-  const body = buildBody(addForm);
+    const body = buildBody(addForm);
 
-  // 🔌 SIN INTERNET
-  if (!navigator.onLine) {
-    const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
-    pending.push(body);
-    localStorage.setItem("pending_edificios", JSON.stringify(pending));
-    setShowAddModal(false);
-    setAddForm(emptyAdd);
-    alert("Sin conexión. El edificio se guardará y enviará automáticamente cuando vuelva la conexión.");
-    return;
-  }
+    // 🔌 SIN INTERNET
+    if (!navigator.onLine) {
+      const pending = JSON.parse(localStorage.getItem("pending_edificios") || "[]");
+      pending.push(body);
+      localStorage.setItem("pending_edificios", JSON.stringify(pending));
+      setShowAddModal(false);
+      setAddForm(emptyAdd);
+      alert("Sin conexión. El edificio se guardará y enviará automáticamente cuando vuelva la conexión.");
+      return;
+    }
 
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (res.ok) { setShowAddModal(false); setAddForm(emptyAdd); fetchEdificios(); }
-    else setModalError(data.detail || "Error al agregar edificio");
-  } catch {
-    setModalError("No se pudo conectar con el servidor");
-  }
-};
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (res.ok) { setShowAddModal(false); setAddForm(emptyAdd); fetchEdificios(); }
+      else setModalError(data.detail || "Error al agregar edificio");
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
+  };
 
   const openEditModal = (e: Edificio) => {
     setModalError("");
@@ -238,37 +238,37 @@ const handleAddSubmit = async () => {
   };
 
   const handleEditSubmit = async () => {
-  setModalError("");
+    setModalError("");
 
-  if (!editForm.name_building.trim()) {
-    setModalError("El nombre del edificio es obligatorio.");
-    return;
-  }
+    if (!editForm.name_building.trim()) {
+      setModalError("El nombre del edificio es obligatorio.");
+      return;
+    }
 
-  const lat = parseFloat(editForm.lat_building);
-  const lon = parseFloat(editForm.lon_building);
+    const lat = parseFloat(editForm.lat_building);
+    const lon = parseFloat(editForm.lon_building);
 
-  if (!editForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
-    setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
-    return;
-  }
-  if (!editForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
-    setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
-    return;
-  }
+    if (!editForm.lat_building || isNaN(lat) || lat < -90 || lat > 90) {
+      setModalError("La latitud debe ser un número entre -90 y 90. Ej: 20.5888");
+      return;
+    }
+    if (!editForm.lon_building || isNaN(lon) || lon < -180 || lon > 180) {
+      setModalError("La longitud debe ser un número entre -180 y 180. Ej: -100.3899");
+      return;
+    }
 
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
-      method: "PUT", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(buildBody(editForm)),
-    });
-    const data = await res.json();
-    if (res.ok) { setShowEditModal(false); fetchEdificios(); }
-    else setModalError(data.detail || "Error al editar edificio");
-  } catch {
-    setModalError("No se pudo conectar con el servidor");
-  }
-};
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios/${editForm.id_building}`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildBody(editForm)),
+      });
+      const data = await res.json();
+      if (res.ok) { setShowEditModal(false); fetchEdificios(); }
+      else setModalError(data.detail || "Error al editar edificio");
+    } catch {
+      setModalError("No se pudo conectar con el servidor");
+    }
+  };
 
   const handleDelete = async (id: number, name: string) => {
     if (!window.confirm(`¿Eliminar el edificio "${name}"?`)) return;
@@ -362,12 +362,36 @@ const handleAddSubmit = async () => {
       {CapacidadSection(form, setForm)}
 
       <span style={labelStyle}>Latitud</span>
-      <input style={inputStyle} placeholder="Ej: 20.5888" type="number" step="any" value={(form as any).lat_building}
-        onChange={(e) => setForm((p: any) => ({ ...p, lat_building: e.target.value }))} />
+      <input
+        style={inputStyle}
+        placeholder="Ej: 20.5888"
+        type="number"
+        step="0.000001"
+        min="-90"
+        max="90"
+        value={(form as any).lat_building}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val.includes(".") && val.split(".")[1]?.length > 6) return;
+          setForm((p: any) => ({ ...p, lat_building: val }));
+        }}
+      />
 
       <span style={labelStyle}>Longitud</span>
-      <input style={inputStyle} placeholder="Ej: -100.3899" type="number" step="any" value={(form as any).lon_building}
-        onChange={(e) => setForm((p: any) => ({ ...p, lon_building: e.target.value }))} />
+      <input
+        style={inputStyle}
+        placeholder="Ej: -100.3899"
+        type="number"
+        step="0.00000001"
+        min="-180"
+        max="180"
+        value={(form as any).lon_building}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val.includes(".") && val.split(".")[1]?.length > 8) return;
+          setForm((p: any) => ({ ...p, lon_building: val }));
+        }}
+      />
 
       <span style={labelStyle}>URL de imagen</span>
       <input style={inputStyle} placeholder="https://..." value={(form as any).imagen_url}
