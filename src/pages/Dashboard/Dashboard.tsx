@@ -147,7 +147,7 @@ function Dashboard() {
   const rawMax = Math.max(...activeData.map((d) => d.value), 1);
   // Redondear hacia arriba al entero más bonito
   const maxValue = rawMax <= 5 ? rawMax : Math.ceil(rawMax / 5) * 5;
-  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * i));
+const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxValue / 4) * (4 - i)));
 
   const width = 800;
   const height = 250;
