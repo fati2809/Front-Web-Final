@@ -421,13 +421,14 @@ function Eventos() {
     if (!addForm.name_event.trim()) { setModalError("El nombre del evento es obligatorio."); return; }
     if (!addForm.timedate_event) { setModalError("La fecha y hora de inicio son obligatorias."); return; }
     if (!addForm.id_building) { setModalError("Debes seleccionar un edificio."); return; }
-    if (addForm.timedate_end && addForm.timedate_event && addForm.timedate_end <= addForm.timedate_event) {
-      setModalError("La fecha/hora de fin debe ser posterior a la de inicio."); return;
+    if (!addForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
+    if (!addForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
+    if (addForm.timedate_event && addForm.timedate_event < new Date().toISOString().slice(0, 16)) {
+      setModalError("La fecha de inicio no puede ser en el pasado."); return;
     }
 
     const body = buildBody(addForm);
 
-    // 🔌 SIN INTERNET
     if (!navigator.onLine) {
       const pending = JSON.parse(localStorage.getItem("pending_eventos") || "[]");
       pending.push(body);
@@ -499,8 +500,10 @@ function Eventos() {
 
   const handleEditSubmit = async () => {
     setModalError("");
-    if (editForm.timedate_end && editForm.timedate_event && editForm.timedate_end <= editForm.timedate_event) {
-      setModalError("La fecha/hora de fin debe ser posterior a la de inicio."); return;
+    if (!editForm.id_profe) { setModalError("Debes seleccionar un profesor."); return; }
+    if (!editForm.id_user) { setModalError("Debes seleccionar un usuario."); return; }
+    if (editForm.timedate_event && editForm.timedate_event < new Date().toISOString().slice(0, 16)) {
+      setModalError("La fecha de inicio no puede ser en el pasado."); return;
     }
     const body = buildBody(editForm);
     try {
@@ -574,6 +577,7 @@ function Eventos() {
     const plantaActual = (form as any).planta_event || "";
     const aulaSeleccionada = aulas.find(a => a.id_aula === idAula) ?? null;
     const imgUrl = (form as any).img_event || "";
+    const nowLocal = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
     const plantasDisponibles = idBuilding
       ? [...new Set(
@@ -704,12 +708,13 @@ function Eventos() {
         {/* Fechas */}
         <span style={labelStyle}>Fecha y hora de inicio</span>
         <input style={inputStyle} type="datetime-local" value={form.timedate_event}
+          min={nowLocal}
           onChange={e => setForm((p: any) => ({ ...p, timedate_event: e.target.value }))} />
 
         <span style={labelStyle}>Fecha y hora de fin</span>
         <input
           style={{ ...inputStyle, borderColor: form.timedate_end && form.timedate_event && form.timedate_end <= form.timedate_event ? "#ef4444" : "#d1d5db" }}
-          type="datetime-local" value={form.timedate_end} min={form.timedate_event}
+          type="datetime-local" value={form.timedate_end} min={form.timedate_event || nowLocal}
           onChange={e => setForm((p: any) => ({ ...p, timedate_end: e.target.value }))} />
         {form.timedate_end && form.timedate_event && form.timedate_end <= form.timedate_event && (
           <span style={{ fontSize: "12px", color: "#dc2626", marginTop: "-8px" }}>⚠️ La hora de fin debe ser posterior a la de inicio.</span>
