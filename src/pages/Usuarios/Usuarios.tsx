@@ -141,13 +141,15 @@ function Usuarios() {
   const handleAddSubmit = async () => {
     setModalError("");
     try {
-      if (addForm.id_rol === 3) {
+      const esProfesor = addForm.id_rol === 4;
+
+      if (esProfesor) {
         await createProfesor({
           name_user: addForm.name_user,
           email_user: addForm.email_user,
           pass_user: addForm.pass_user,
           matricula_user: parseInt(addForm.matricula_user),
-          id_rol: 3,
+          id_rol: 4,
           id_division: addForm.id_division
             ? parseInt(addForm.id_division)
             : undefined,
@@ -493,13 +495,13 @@ function Usuarios() {
                       <td>{usuario.matricula_user ?? "—"}</td>
                       <td>{usuario.rol}</td>
                       <td>
-                        {usuario.id_rol === 3 ? (usuario.division ?? "—") : "—"}
+                        {usuario.id_rol === 4 ? (usuario.division ?? "—") : "—"}
                       </td>
                       <td>
-                        {usuario.id_rol === 3 ? (usuario.planta ?? "—") : "—"}
+                        {usuario.id_rol === 4 ? (usuario.planta ?? "—") : "—"}
                       </td>
                       <td>
-                        {usuario.id_rol === 3 ? (usuario.edificio ?? "—") : "—"}
+                        {usuario.id_rol === 4 ? (usuario.edificio ?? "—") : "—"}
                       </td>
                       <td className="cell-actions">
                         <button
@@ -629,10 +631,12 @@ function Usuarios() {
             >
               <option value={1}>Administrador</option>
               <option value={2}>Usuario</option>
-              <option value={3}>Profesor</option>
+              <option value={3}>Coordinador</option>
+              <option value={4}>Profesor</option>
+
             </select>
 
-            {addForm.id_rol === 3 && (
+            {addForm.id_rol === 4 && (
               <>
                 <div style={dividerStyle}>Datos del Profesor</div>
 
@@ -756,7 +760,8 @@ function Usuarios() {
             >
               <option value={1}>Administrador</option>
               <option value={2}>Usuario</option>
-              <option value={3}>Profesor</option>
+              <option value={3}>Coordinador</option>
+              <option value={4}>Profesor</option>
             </select>
 
             <div

@@ -34,6 +34,7 @@ export function getUsuarios() {
   return apiFetch("/usuarios");
 }
 
+// 🔥 CORREGIDO
 export function createProfesor(data: UsuarioCreate) {
   return apiFetch("/register-profesor", {
     method: "POST",

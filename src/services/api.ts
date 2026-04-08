@@ -1,6 +1,6 @@
 import { supabase } from "../config/supabase";
 
-const API_URL = "https://maposting-backend.onrender.com";
+const API_URL = "http://localhost:8000";
 
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   try {
