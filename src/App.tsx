@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login          from "./pages/Login/Login";
 import Registro       from "./pages/Login/Registro";
 import ResetPassword  from "./pages/Login/ResetPassword";
 import AuthCallback   from "./pages/AuthCallback";
+import { Outlet } from "react-router-dom";
 
 // Admin
 import Dashboard  from "./pages/Dashboard/Dashboard";

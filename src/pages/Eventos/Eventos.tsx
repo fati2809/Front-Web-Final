@@ -327,8 +327,6 @@ function Eventos() {
     ?? profesores.find(p => p.id_user === ev.id_user)?.nombre_profe
     ?? (ev.id_profe ? `Profesor ${ev.id_profe}` : "—");
 
-  const getNombreUsuario = (id: string | null) =>
-    usuarios.find(u => u.id_user === id)?.name_user ?? (id ? `Usuario ${id.slice(0, 8)}...` : "—");
 
   const handleLogout = () => {
     localStorage.removeItem("user"); localStorage.removeItem("token");
