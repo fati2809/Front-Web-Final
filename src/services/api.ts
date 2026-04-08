@@ -1,10 +1,9 @@
 import { supabase } from "../config/supabase";
 
-const API_URL = `${import.meta.env.VITE_API_URL}";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   try {
-    // Obtener token de Supabase automáticamente
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -16,11 +15,9 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(options.headers || {}),
       },
     });
 
-    // 🔥 Solo manejar errores HTTP (no de red)
     if (!response.ok) {
       const error = await response
         .json()
@@ -31,15 +28,10 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
 
     return response.json();
   } catch (error: any) {
-    // 🔥 CLAVE: detectar error de red (offline)
     if (error instanceof TypeError) {
       console.log("📴 Sin conexión, request manejada por Service Worker");
-
-      // 👉 IMPORTANTE: relanzar el error para que Workbox lo capture
       throw error;
     }
-
-    // Otros errores (backend)
     throw error;
   }
 }
