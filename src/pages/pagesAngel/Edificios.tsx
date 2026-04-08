@@ -118,7 +118,7 @@ function Edificios() {
   const handleAddSubmit = async () => {
     setModalError("");
     try {
-      const res = await fetch("${import.meta.env.VITE_API_URL}/edificios", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/edificios", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name_building: addForm.name_building,
