@@ -1,6 +1,6 @@
 import { supabase } from "../config/supabase";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "${import.meta.env.VITE_API_URL}";
 
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   try {
