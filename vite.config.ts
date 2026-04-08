@@ -11,12 +11,12 @@ export default defineConfig({
         enabled: true,
         type: "module",
       },
-
-      // Estrategia recomendada para Background Sync
       strategies: "injectManifest",
       srcDir: "src",
       filename: "sw.ts",
-
+      injectManifest: {
+        injectionPoint: undefined, // ← clave para que no falle el endsWith
+      },
       manifest: {
         name: "Mapposting",
         short_name: "Mapposting",
@@ -40,9 +40,7 @@ export default defineConfig({
       },
     }),
   ],
-
   server: {
     port: 5173,
-    // proxy: { ... } si lo necesitas
   },
 });
