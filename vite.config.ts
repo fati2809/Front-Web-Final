@@ -15,7 +15,8 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       injectManifest: {
-        injectionPoint: undefined, // ← clave para que no falle el endsWith
+        injectionPoint: "self.__WB_MANIFEST",
+        rollupFormat: "es",
       },
       manifest: {
         name: "Mapposting",

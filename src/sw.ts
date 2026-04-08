@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 import { precacheAndRoute } from "workbox-precaching";
+///<reference types="vite-plugin-pwa/vanillajs" /> 
+/// <reference lib="webworker" />
 import { registerRoute } from "workbox-routing";
 import { NetworkOnly, NetworkFirst } from "workbox-strategies";
 import { BackgroundSyncPlugin } from "workbox-background-sync";

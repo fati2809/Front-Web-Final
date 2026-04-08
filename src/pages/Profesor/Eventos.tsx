@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { getSession, clearSession } from "../../services/auth";
 import { getEventosProfesor } from "../../services/profesor";
 import { useGoogleCalendar } from "../Eventos/useGoogleCalendar"; // 👈 IMPORT
-import "./Profesor.css";
 
 /* 🔵 ICONO GOOGLE */
 function GoogleCalIcon({ size = 16, color = "#1a73e8" }) {
