@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getSession, clearSession } from "../../services/auth";
-import { useGoogleCalendar } from "../Eventos/useGoogleCalendar";
 import "./Coordinador.css";
 
 interface Evento {
@@ -86,7 +85,6 @@ const labelStyle: React.CSSProperties = {
 function CoordinadorEventos() {
   const navigate = useNavigate();
   const { user } = getSession();
-  const gcal     = useGoogleCalendar();
 
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
   const [isOnline, setIsOnline]             = useState(navigator.onLine);
