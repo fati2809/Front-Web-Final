@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../Eventos/Eventos.css";
 import { useGoogleCalendar } from "./useGoogleCalendar";
+import { NotificacionesBell } from "../../components/NotificacionesBell";
 
 interface Evento {
   id_event: number;
@@ -675,6 +676,7 @@ function Eventos() {
               <button className="btn-primary" onClick={() => { setModalError(""); setShowAddModal(true); }}>Agregar</button>
             </div>
             <div className="header-right" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+               <NotificacionesBell />  
               <GoogleCalendarButton isReady={gcal.isReady} isSignedIn={gcal.isSignedIn} status={gcal.status} onSignIn={gcal.signIn} onSignOut={gcal.signOut} />
               <div className="search-box">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
