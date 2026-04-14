@@ -166,21 +166,6 @@ function SemaforoBadge({ nivel }: { nivel: number }) {
   );
 }
 
-function PrioridadSelector({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <div style={{ display: "flex", gap: "8px" }}>
-      {[1, 2, 3].map(n => {
-        const cfg    = PRIORIDAD[n];
-        const active = String(value) === String(n);
-        return (
-          <button key={n} type="button" onClick={() => onChange(String(n))} style={{ flex: 1, padding: "9px 6px", borderRadius: "8px", cursor: "pointer", border: `2px solid ${active ? cfg.dot : "#e5e7eb"}`, backgroundColor: active ? cfg.bg : "#f9fafb", color: cfg.color, fontWeight: 600, fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-            <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: cfg.dot }} />{cfg.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
 
 const PLANTA_BTN: Record<string, { label: string; color: string; bg: string; dot: string }> = {
   baja:   { label: "Planta baja", color: "#3b82f6", bg: "#eff6ff", dot: "#3b82f6" },
